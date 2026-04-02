@@ -1,1 +1,1073 @@
-hello
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mestrado UFMS · Dr. Pedro Santos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{--bg:#08090d;--s1:#0f1117;--s2:#161921;--s3:#1c2028;--s4:#232733;--bd:rgba(255,255,255,0.07);--bdh:rgba(255,255,255,0.13);--ac:#4f8ef7;--acd:rgba(79,142,247,0.12);--acg:rgba(79,142,247,0.35);--gr:#22c55e;--grd:rgba(34,197,94,0.12);--am:#f59e0b;--amd:rgba(245,158,11,0.12);--rd:#ef4444;--rdd:rgba(239,68,68,0.12);--pu:#a855f7;--pud:rgba(168,85,247,0.12);--cy:#06b6d4;--cyd:rgba(6,182,212,0.12);--pk:#ec4899;--pkd:rgba(236,72,153,0.12);--tx:#dde2ec;--txm:#7b8899;--txd:#3f4855;--r:12px;--rs:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
+.app{display:flex;min-height:100vh}
+/* SIDEBAR */
+.sidebar{width:224px;background:var(--s1);border-right:1px solid var(--bd);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:200;transition:transform .25s}
+.sb-logo{padding:20px 16px 16px;border-bottom:1px solid var(--bd)}
+.sb-logo h1{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ac);line-height:1.3}
+.sb-logo p{font-size:10px;color:var(--txd);margin-top:3px;line-height:1.4}
+.sb-nav{flex:1;padding:8px 6px;overflow-y:auto}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--txd);padding:10px 12px 3px;margin-top:4px}
+.nb{display:flex;align-items:center;gap:9px;width:100%;padding:8px 12px;border:none;background:transparent;color:var(--txm);font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:400;border-radius:var(--rs);cursor:pointer;text-align:left;transition:all .15s}
+.nb:hover{background:var(--s2);color:var(--tx)}
+.nb.active{background:var(--acd);color:var(--ac);font-weight:500}
+.nb .ic{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nb .bx{margin-left:auto;background:var(--ac);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;min-width:16px;text-align:center}
+.sb-foot{padding:12px 14px;border-top:1px solid var(--bd);font-size:9.5px;color:var(--txd);text-align:center;line-height:1.5}
+/* MAIN */
+.main{margin-left:224px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:54px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 22px;gap:12px;position:sticky;top:0;z-index:100}
+.topbar h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;flex:1}
+.content{padding:22px;flex:1}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:var(--rs);border:1px solid transparent;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;text-decoration:none}
+.btn-p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.btn-p:hover{background:#3a7ae0;box-shadow:0 0 16px var(--acg)}
+.btn-g{background:transparent;color:var(--txm);border-color:var(--bd)}
+.btn-g:hover{background:var(--s2);color:var(--tx);border-color:var(--bdh)}
+.btn-red{background:var(--rdd);color:var(--rd);border-color:var(--rd)}
+.btn-sm{padding:4px 9px;font-size:11.5px}
+/* STAT GRID */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:11px;margin-bottom:22px}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:15px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--c,var(--ac))}
+.sv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--c,var(--ac));line-height:1}
+.sl{font-size:9.5px;color:var(--txd);margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
+.sp{font-size:11px;color:var(--txm);margin-top:2px}
+/* TABLE */
+.tw{border-radius:var(--r);border:1px solid var(--bd);overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead tr{background:var(--s2)}
+th{padding:10px 12px;text-align:left;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txd);white-space:nowrap}
+td{padding:10px 12px;border-top:1px solid var(--bd);color:var(--tx);vertical-align:middle}
+tbody tr:hover{background:var(--s2)}
+.tdt{max-width:210px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10.5px;font-weight:500;white-space:nowrap}
+.b-bl{background:var(--acd);color:var(--ac)}.b-gr{background:var(--grd);color:var(--gr)}
+.b-am{background:var(--amd);color:var(--am)}.b-rd{background:var(--rdd);color:var(--rd)}
+.b-pu{background:var(--pud);color:var(--pu)}.b-cy{background:var(--cyd);color:var(--cy)}
+.b-pk{background:var(--pkd);color:var(--pk)}.b-gy{background:var(--s3);color:var(--txm)}
+/* INPUTS */
+input,textarea,select{background:var(--s2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:12.5px;padding:7px 10px;width:100%;outline:none;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--ac)}
+select option{background:var(--s2)}
+textarea{resize:vertical;min-height:68px}
+label{display:block;font-size:11px;color:var(--txm);margin-bottom:4px;font-weight:500}
+.fg{display:grid;gap:12px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fa{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.sb-wrap{position:relative}
+.sb-wrap input{padding-left:32px}
+.sb-wrap .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--txd);font-size:12px;pointer-events:none}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.filters .sb-wrap{flex:1;min-width:160px}
+.filters select{width:auto;min-width:140px}
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(5px);z-index:500;display:flex;align-items:center;justify-content:center;padding:18px;opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:1px solid var(--bdh);border-radius:16px;padding:24px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;transform:scale(.96);transition:transform .2s}
+.mo.open .modal{transform:scale(1)}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.mt{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.mc{background:none;border:none;color:var(--txm);font-size:16px;cursor:pointer;padding:3px 6px;border-radius:4px;line-height:1}
+.mc:hover{color:var(--tx);background:var(--s2)}
+/* KANBAN */
+.kb{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;align-items:start}
+.kc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.kch{padding:10px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:7px}
+.kct{font-family:'Syne',sans-serif;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.kcc{margin-left:auto;background:var(--s3);color:var(--txm);font-size:10px;padding:1px 6px;border-radius:10px}
+.kd{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.kcards{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:48px}
+.kcard{background:var(--s2);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;cursor:pointer;transition:all .15s;position:relative}
+.kcard:hover{border-color:var(--bdh);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.kcard-t{font-size:12.5px;font-weight:500;color:var(--tx);margin-bottom:5px;line-height:1.4}
+.kcard-m{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.kadd{width:calc(100% - 16px);margin:0 8px 8px;padding:6px;border:1px dashed var(--bd);background:transparent;color:var(--txd);font-size:11.5px;font-family:'DM Sans',sans-serif;border-radius:var(--rs);cursor:pointer;transition:all .15s}
+.kadd:hover{border-color:var(--ac);color:var(--ac);background:var(--acd)}
+/* CALENDAR */
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-nav{display:flex;gap:8px;align-items:center}
+.cal-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bd);border-radius:var(--r);overflow:hidden}
+.cdn{background:var(--s2);padding:6px;text-align:center;font-size:9.5px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.05em}
+.cd{background:var(--s1);padding:6px;min-height:74px;cursor:pointer;transition:background .1s}
+.cd:hover{background:var(--s2)}
+.cd.om{background:var(--bg);opacity:.4}
+.cd.today{background:var(--acd)}
+.cd-num{font-size:11px;color:var(--txm);margin-bottom:3px}
+.cd.today .cd-num{color:var(--ac);font-weight:700}
+.cev{font-size:9px;padding:2px 4px;border-radius:3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cev.eb{background:var(--acd);color:var(--ac)}.cev.eg{background:var(--grd);color:var(--gr)}
+.cev.ea{background:var(--amd);color:var(--am)}.cev.ep{background:var(--pud);color:var(--pu)}
+/* UPLOAD */
+.uz{border:2px dashed var(--bd);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--s1)}
+.uz:hover,.uz.dov{border-color:var(--ac);background:var(--acd)}
+.fl{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.fi{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--rs)}
+.fi-info{flex:1;min-width:0}
+.fi-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fi-meta{font-size:10px;color:var(--txd);margin-top:1px}
+/* MISC */
+.divider{height:1px;background:var(--bd);margin:16px 0}
+.empty{text-align:center;padding:36px 20px;color:var(--txd)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.flex-end{display:flex;justify-content:flex-end;gap:8px}
+.flex-b{display:flex;justify-content:space-between;align-items:center}
+.stitle{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:700;margin-bottom:11px}
+.gap{margin-top:12px}
+.txm{color:var(--txm);font-size:12px}
+.txd{color:var(--txd);font-size:11px}
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--s1);border:1px solid var(--bdh);border-radius:var(--rs);padding:10px 16px;font-size:12.5px;z-index:999;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:var(--gr);color:var(--gr)}
+.toast.err{border-color:var(--rd);color:var(--rd)}
+/* LOADING */
+.loading{display:inline-block;width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* TOGGLE */
+.tsw{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0}
+.tsw input{opacity:0;width:0;height:0}
+.ttr{position:absolute;inset:0;background:var(--s3);border-radius:10px;cursor:pointer;transition:.2s}
+.ttr::before{content:'';position:absolute;height:13px;width:13px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
+input:checked+.ttr{background:var(--pu)}
+input:checked+.ttr::before{transform:translateX(16px)}
+/* MENU TOGGLE */
+.menu-btn{display:none;background:none;border:none;color:var(--tx);font-size:18px;cursor:pointer;padding:4px}
+/* AXIS BADGE COLORS */
+.ax-sc{background:var(--pud);color:var(--pu)}.ax-ml{background:var(--cyd);color:var(--cy)}
+.ax-ct{background:var(--amd);color:var(--am)}.ax-fb{background:var(--rdd);color:var(--rd)}
+.ax-cm{background:var(--grd);color:var(--gr)}.ax-ep{background:var(--acd);color:var(--ac)}
+.ax-xi{background:var(--pkd);color:var(--pk)}.ax-wt{background:rgba(251,146,60,.12);color:#fb923c}
+.ax-rt{background:rgba(20,184,166,.12);color:#14b8a6}
+/* DETAIL */
+.ds{margin-bottom:13px}
+.dl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txd);margin-bottom:3px}
+.dv{font-size:13px;color:var(--tx);line-height:1.6}
+/* CERT */
+.cert{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:13px;transition:border-color .15s}
+.cert:hover{border-color:var(--bdh)}
+/* PROGRESS */
+.pb{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-top:5px}
+.pf{height:100%;border-radius:2px;background:var(--ac);transition:width .6s ease}
+/* RESPONSIVE */
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.kb{grid-template-columns:1fr 1fr}.menu-btn{display:block}.topbar{padding:0 14px}.content{padding:14px}}
+@media(max-width:560px){.kb{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.sg{grid-template-columns:repeat(2,1fr)}}
+/* OVERLAY for mobile sidebar */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199}
+@media(max-width:900px){.sb-overlay.show{display:block}}
+.view{animation:fi .18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <h1>Mestrado UFMS</h1>
+    <p>Dr. Pedro Santos<br>CREFITO 13 177737-F</p>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Visão Geral</div>
+    <button class="nb active" onclick="go('dashboard')"><span class="ic">📊</span>Dashboard</button>
+    <button class="nb" onclick="go('calendar')"><span class="ic">📅</span>Calendário</button>
+    <div class="sb-sec">Pesquisa</div>
+    <button class="nb" onclick="go('articles')"><span class="ic">📚</span>Fichamento<span class="bx" id="art-ct">55</span></button>
+    <button class="nb" onclick="go('files')"><span class="ic">📁</span>Documentos</button>
+    <div class="sb-sec">Gestão</div>
+    <button class="nb" onclick="go('kanban')"><span class="ic">🗂️</span>Kanban</button>
+    <button class="nb" onclick="go('certs')"><span class="ic">🏅</span>Certificados</button>
+    <div class="sb-sec">Orientador</div>
+    <button class="nb" onclick="go('advisor')"><span class="ic">👨‍🏫</span>Painel Prof. Cássio</button>
+  </nav>
+  <div class="sb-foot">
+    Prof. Dr. Cássio Pinho dos Reis<br>
+    <span>Estatística · UFMS</span>
+  </div>
+</aside>
+<div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+<div class="main">
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <h2 id="page-title">Dashboard</h2>
+    <div id="sync-status" class="txd" style="font-size:10px;display:flex;align-items:center;gap:5px">
+      <span id="sync-dot" style="width:6px;height:6px;border-radius:50%;background:var(--gr);display:inline-block"></span>
+      <span id="sync-label">Conectado</span>
+    </div>
+    <label class="tsw" title="Modo Orientador" style="margin-left:8px">
+      <input type="checkbox" id="adv-toggle" onchange="toggleAdv(this.checked)">
+      <span class="ttr"></span>
+    </label>
+    <span class="txm" style="margin-left:4px">Orientador</span>
+  </header>
+  <div class="content" id="app-content">
+    <div style="display:flex;align-items:center;justify-content:center;height:60vh;gap:12px;flex-direction:column">
+      <div class="loading" style="width:24px;height:24px;border-width:3px"></div>
+      <span class="txm">Conectando ao banco de dados...</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MODALS -->
+
+<div class="mo" id="m-article"><div class="modal" style="max-width:600px">
+  <div class="mh"><div class="mt" id="m-art-title">Artigo</div><button class="mc" onclick="closeMo('m-article')">✕</button></div>
+  <div id="m-art-body"></div>
+</div></div>
+
+<div class="mo" id="m-task"><div class="modal">
+  <div class="mh"><div class="mt" id="m-task-title">Nova Atividade</div><button class="mc" onclick="closeMo('m-task')">✕</button></div>
+  <div class="fg">
+    <input type="hidden" id="t-id">
+    <div><label>Título *</label><input id="t-title" placeholder="Ex: Submeter ao Comitê de Ética"></div>
+    <div class="fr">
+      <div><label>Categoria</label><select id="t-cat">
+        <option>Publicação</option><option>Comitê de Ética</option><option>Evento</option>
+        <option>Administrativo</option><option>App Stamina</option><option>Ensino</option>
+        <option>Clínica</option><option>Outro</option>
+      </select></div>
+      <div><label>Prazo</label><input type="date" id="t-due"></div>
+    </div>
+    <div class="fr">
+      <div><label>Coluna</label><select id="t-col">
+        <option value="backlog">Backlog</option><option value="todo">A Fazer</option>
+        <option value="doing">Em Andamento</option><option value="done">Concluído</option>
+      </select></div>
+      <div><label>Prioridade</label><select id="t-pri">
+        <option>Normal</option><option>Alta</option><option>Urgente</option>
+      </select></div>
+    </div>
+    <div><label>Descrição</label><textarea id="t-desc" placeholder="Detalhes, links, contexto..."></textarea></div>
+  </div>
+  <div class="fa">
+    <button class="btn btn-g" onclick="closeMo('m-task')">Cancelar</button>
+    <button class="btn btn-p" onclick="saveTask()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="mo" id="m-event"><div class="modal">
+  <div class="mh"><div class="mt">Novo Evento</div><button class="mc" onclick="closeMo('m-event')">✕</button></div>
+  <div class="fg">
+    <input type="hidden" id="e-id">
+    <div><label>Título *</label><input id="e-title" placeholder="Ex: Submissão BJSM — Artigo 1"></div>
+    <div class="fr">
+      <div><label>Data *</label><input type="date" id="e-date"></div>
+      <div><label>Tipo</label><select id="e-type">
+        <option value="eb">Submissão</option><option value="eg">Publicação / Aceite</option>
+        <option value="ea">Prazo / Deadline</option><option value="ep">Congresso / Evento</option>
+      </select></div>
+    </div>
+    <div><label>Notas</label><textarea id="e-notes" placeholder="Informações adicionais..."></textarea></div>
+  </div>
+  <div class="fa">
+    <button class="btn btn-g" onclick="closeMo('m-event')">Cancelar</button>
+    <button class="btn btn-p" onclick="saveEvent()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="mo" id="m-cert"><div class="modal">
+  <div class="mh"><div class="mt">Certificado / Hora Complementar</div><button class="mc" onclick="closeMo('m-cert')">✕</button></div>
+  <div class="fg">
+    <input type="hidden" id="c-id">
+    <div><label>Evento / Atividade *</label><input id="c-event" placeholder="Ex: ACSM Annual Meeting 2026"></div>
+    <div class="fr">
+      <div><label>Data</label><input type="date" id="c-date"></div>
+      <div><label>Horas Complementares</label><input type="number" id="c-hrs" placeholder="8" min="0"></div>
+    </div>
+    <div><label>Tipo</label><select id="c-type">
+      <option>Congresso</option><option>Workshop / Curso</option><option>Palestra</option>
+      <option>Publicação</option><option>Ensino / Docência</option><option>Outro</option>
+    </select></div>
+    <div><label>Observações</label><textarea id="c-notes" placeholder="Número do certificado, local..."></textarea></div>
+  </div>
+  <div class="fa">
+    <button class="btn btn-g" onclick="closeMo('m-cert')">Cancelar</button>
+    <button class="btn btn-p" onclick="saveCert()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="mo" id="m-art-add"><div class="modal" style="max-width:600px">
+  <div class="mh"><div class="mt" id="m-art-add-title">Adicionar Artigo</div><button class="mc" onclick="closeMo('m-art-add')">✕</button></div>
+  <div class="fg">
+    <input type="hidden" id="na-id">
+    <div class="fr">
+      <div><label>Autor(es) *</label><input id="na-author" placeholder="Ex: Bittencourt et al."></div>
+      <div><label>Ano</label><input type="number" id="na-year" placeholder="2024" min="1900" max="2030"></div>
+    </div>
+    <div><label>Título *</label><input id="na-title" placeholder="Título completo do artigo"></div>
+    <div class="fr">
+      <div><label>Tipo</label><select id="na-type">
+        <option>Artigo</option><option>Revisão Sistemática</option><option>Meta-análise</option>
+        <option>Estudo Observacional</option><option>Ensaio Clínico</option><option>Conceitual</option>
+      </select></div>
+      <div><label>Eixo Temático</label><select id="na-axis">
+        <option>Sistemas Complexos</option><option>Machine Learning & IA</option><option>Carga de Treino</option>
+        <option>Fadiga & Biomarcadores</option><option>Ciclo Menstrual & RED-S</option>
+        <option>Epidemiologia de Lesões</option><option>Explicabilidade em IA</option>
+        <option>Wearables & Tecnologia</option><option>RTS & Reabilitação</option>
+      </select></div>
+    </div>
+    <div class="fr">
+      <div><label>Fator de Impacto</label><input id="na-if" placeholder="IF 16.3 (BJSM)"></div>
+      <div><label>Status</label><select id="na-status">
+        <option>Lido</option><option>Pendente</option><option>Em Andamento</option>
+      </select></div>
+    </div>
+    <div><label>Objetivo</label><input id="na-obj" placeholder="Objetivo principal do estudo"></div>
+    <div><label>Metodologia</label><input id="na-meth" placeholder="Tipo de estudo e métodos principais"></div>
+    <div><label>Achados Principais</label><textarea id="na-findings" placeholder="Principais resultados e conclusões"></textarea></div>
+    <div><label>Relevância para o Mestrado</label><textarea id="na-rel" placeholder="Por que este artigo é importante para sua pesquisa?"></textarea></div>
+  </div>
+  <div class="fa">
+    <button class="btn btn-g" onclick="closeMo('m-art-add')">Cancelar</button>
+    <button class="btn btn-p" onclick="saveArticle()">Salvar Artigo</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="doc-input" accept=".pdf,.docx,.md,.txt,.xlsx,.csv,.png,.jpg,.jpeg" multiple style="display:none" onchange="handleDocUpload(this)">
+
+<script>
+// ============================================================
+// SUPABASE INIT
+// ============================================================
+const SUPA_URL = 'https://laoctlvvrqauafvexywj.supabase.co';
+const SUPA_KEY = 'sb_publishable_a5duTot3u4hQ_zD8u_EjrA_7hNIydDF';
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_KEY);
+
+// ============================================================
+// UTILS
+// ============================================================
+const $ = id => document.getElementById(id);
+const q = s => document.querySelector(s);
+const fmtDate = d => d ? new Date(d+'T12:00:00').toLocaleDateString('pt-BR') : '—';
+const today = () => new Date().toISOString().split('T')[0];
+
+function toast(msg, type='ok') {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function openMo(id) { $(id).classList.add('open'); }
+function closeMo(id) { $(id).classList.remove('open'); }
+
+function setSyncStatus(ok) {
+  $('sync-dot').style.background = ok ? 'var(--gr)' : 'var(--rd)';
+  $('sync-label').textContent = ok ? 'Conectado' : 'Offline';
+}
+
+function axisClass(axis) {
+  const m = {'Sistemas Complexos':'ax-sc','Machine Learning & IA':'ax-ml','Carga de Treino':'ax-ct',
+    'Fadiga & Biomarcadores':'ax-fb','Ciclo Menstrual & RED-S':'ax-cm','Epidemiologia de Lesões':'ax-ep',
+    'Explicabilidade em IA':'ax-xi','Wearables & Tecnologia':'ax-wt','RTS & Reabilitação':'ax-rt'};
+  return m[axis] || 'b-gy';
+}
+
+function statusBadge(s) {
+  if(s==='Lido') return '<span class="badge b-gr">Lido</span>';
+  if(s==='Pendente') return '<span class="badge b-am">Pendente</span>';
+  if(s==='Em Andamento') return '<span class="badge b-bl">Em Andamento</span>';
+  return `<span class="badge b-gy">${s}</span>`;
+}
+
+function priBadge(p) {
+  if(p==='Urgente') return '<span class="badge b-rd">Urgente</span>';
+  if(p==='Alta') return '<span class="badge b-am">Alta</span>';
+  return '<span class="badge b-gy">Normal</span>';
+}
+
+function catBadge(c) {
+  const col = {Publicação:'b-bl','Comitê de Ética':'b-rd',Evento:'b-pu','App Stamina':'b-cy',Ensino:'b-gr',Clínica:'b-am',Administrativo:'b-gy'};
+  return `<span class="badge ${col[c]||'b-gy'}">${c}</span>`;
+}
+
+function eventLabel(t) {
+  const m={eb:'Submissão',eg:'Publicação',ea:'Prazo',ep:'Congresso'};
+  return m[t]||t;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let currentView = 'dashboard';
+const advisorMode = {active: false};
+
+function go(view) {
+  currentView = view;
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b => {
+    if(b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${view}'`))
+      b.classList.add('active');
+  });
+  const titles = {dashboard:'Dashboard',calendar:'Calendário',articles:'Fichamento de Artigos',
+    files:'Documentos',kanban:'Kanban',certs:'Certificados & Horas',advisor:'Painel do Orientador'};
+  $('page-title').textContent = titles[view] || view;
+  closeSidebar();
+  render(view);
+}
+
+function render(view) {
+  const c = $('app-content');
+  c.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:40px"><div class="loading"></div></div>';
+  c.className = 'content view';
+  const fn = {dashboard:renderDashboard,calendar:renderCalendar,articles:renderArticles,
+    files:renderFiles,kanban:renderKanban,certs:renderCerts,advisor:renderAdvisor};
+  if(fn[view]) fn[view]();
+}
+
+function toggleSidebar() {
+  $('sidebar').classList.toggle('open');
+  $('sb-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+  $('sidebar').classList.remove('open');
+  $('sb-overlay').classList.remove('show');
+}
+function toggleAdv(on) { advisorMode.active = on; render(currentView); }
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function renderDashboard() {
+  const [arts, tasks, events, certs] = await Promise.all([
+    db.from('articles').select('*'),
+    db.from('tasks').select('*'),
+    db.from('events').select('*'),
+    db.from('certificates').select('*')
+  ]);
+  setSyncStatus(!arts.error);
+  const a = arts.data || [], t = tasks.data || [], e = events.data || [], c = certs.data || [];
+  const lido = a.filter(x=>x.status==='Lido').length;
+  const done = t.filter(x=>x.column_id==='done').length;
+  const hrs = c.reduce((s,x)=>s+(+x.hours||0),0);
+  const upcoming = e.filter(x=>x.event_date >= today()).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,5);
+  const urgent = t.filter(x=>x.column_id!=='done' && x.priority==='Urgente');
+  const high = t.filter(x=>x.column_id!=='done' && x.priority==='Alta');
+
+  const byAxis = {};
+  a.forEach(x=>{ byAxis[x.axis]=(byAxis[x.axis]||0)+1; });
+
+  $('app-content').innerHTML = `
+  ${advisorMode.active ? `<div style="background:linear-gradient(135deg,var(--pud),var(--acd));border:1px solid var(--pu);border-radius:var(--r);padding:11px 15px;margin-bottom:18px;display:flex;align-items:center;gap:10px;font-size:12.5px">
+    <span>👨‍🏫</span> <strong>Modo Orientador ativo</strong> — Visualização como Prof. Dr. Cássio Pinho dos Reis
+  </div>` : ''}
+  <div class="sg">
+    <div class="sc" style="--c:var(--ac)"><div class="sv">${a.length}</div><div class="sl">Artigos Fichados</div><div class="sp">${lido} lidos</div></div>
+    <div class="sc" style="--c:var(--gr)"><div class="sv">${done}</div><div class="sl">Tarefas Concluídas</div><div class="sp">de ${t.length} total</div></div>
+    <div class="sc" style="--c:var(--pu)"><div class="sv">${e.length}</div><div class="sl">Eventos no Calendário</div><div class="sp">${upcoming.length} próximos</div></div>
+    <div class="sc" style="--c:var(--am)"><div class="sv">${hrs}</div><div class="sl">Horas Complementares</div><div class="sp">${c.length} certificados</div></div>
+  </div>
+  <div class="g2" style="margin-bottom:18px">
+    <div class="card" style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+      <div class="stitle">📅 Próximos Eventos</div>
+      ${upcoming.length ? upcoming.map(ev=>`
+        <div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)">
+          <span class="badge cev ${ev.type}" style="flex-shrink:0">${eventLabel(ev.type)}</span>
+          <span style="font-size:12px;flex:1">${ev.title}</span>
+          <span class="txd">${fmtDate(ev.event_date)}</span>
+        </div>`).join('') : '<div class="empty" style="padding:20px"><span class="txd">Nenhum evento próximo</span></div>'}
+    </div>
+    <div class="card" style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+      <div class="stitle">⚡ Prioridades</div>
+      ${urgent.length===0 && high.length===0 ? '<div class="empty" style="padding:20px"><span class="txd">Nenhuma tarefa urgente</span></div>' : ''}
+      ${urgent.map(x=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)">
+        <span class="badge b-rd" style="flex-shrink:0">Urgente</span>
+        <span style="font-size:12px;flex:1">${x.title}</span>
+        <span class="txd">${x.due_date?fmtDate(x.due_date):''}</span>
+      </div>`).join('')}
+      ${high.map(x=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)">
+        <span class="badge b-am" style="flex-shrink:0">Alta</span>
+        <span style="font-size:12px;flex:1">${x.title}</span>
+        <span class="txd">${x.due_date?fmtDate(x.due_date):''}</span>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+    <div class="stitle">📚 Artigos por Eixo Temático</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      ${Object.entries(byAxis).sort((a,b)=>b[1]-a[1]).map(([axis,count])=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span class="badge ${axisClass(axis)}" style="font-size:10px">${axis}</span>
+            <span class="txd">${count}</span>
+          </div>
+          <div class="pb"><div class="pf" style="width:${(count/a.length*100).toFixed(0)}%"></div></div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// ARTICLES
+// ============================================================
+let allArticles = [];
+async function renderArticles() {
+  const {data, error} = await db.from('articles').select('*').order('id');
+  setSyncStatus(!error);
+  allArticles = data || [];
+  $('art-ct').textContent = allArticles.length;
+  const axes = [...new Set(allArticles.map(a=>a.axis))].sort();
+  const statuses = [...new Set(allArticles.map(a=>a.status))].sort();
+
+  $('app-content').innerHTML = `
+  <div class="flex-b" style="margin-bottom:14px">
+    <div class="stitle" style="margin:0">📚 ${allArticles.length} artigos fichados</div>
+    <div style="display:flex;gap:8px">
+      ${!advisorMode.active ? `<button class="btn btn-g btn-sm" onclick="exportCSV()">⬇ Exportar CSV</button>
+      <button class="btn btn-p btn-sm" onclick="openAddArticle()">+ Adicionar</button>` : ''}
+    </div>
+  </div>
+  <div class="filters">
+    <div class="sb-wrap"><span class="si">🔍</span><input id="art-search" placeholder="Buscar autor, título, achados..." oninput="filterArticles()"></div>
+    <select id="art-axis" onchange="filterArticles()">
+      <option value="">Todos os eixos</option>
+      ${axes.map(a=>`<option>${a}</option>`).join('')}
+    </select>
+    <select id="art-status" onchange="filterArticles()">
+      <option value="">Todos os status</option>
+      ${statuses.map(s=>`<option>${s}</option>`).join('')}
+    </select>
+  </div>
+  <div id="art-count" class="txd" style="margin-bottom:8px">Mostrando ${allArticles.length} artigos</div>
+  <div class="tw">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Autor</th><th>Título</th><th>Eixo</th><th>Impacto</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody id="art-tbody"></tbody>
+    </table>
+  </div>`;
+  filterArticles();
+}
+
+function filterArticles() {
+  const s = ($('art-search')||{}).value?.toLowerCase()||'';
+  const ax = ($('art-axis')||{}).value||'';
+  const st = ($('art-status')||{}).value||'';
+  const filtered = allArticles.filter(a =>
+    (!s || a.title?.toLowerCase().includes(s) || a.author?.toLowerCase().includes(s) || a.findings?.toLowerCase().includes(s)) &&
+    (!ax || a.axis===ax) && (!st || a.status===st)
+  );
+  $('art-count').textContent = `Mostrando ${filtered.length} de ${allArticles.length} artigos`;
+  $('art-tbody').innerHTML = filtered.map(a=>`
+    <tr>
+      <td style="color:var(--txd);font-size:11px">${a.id}</td>
+      <td style="white-space:nowrap;font-size:12px">${a.author}</td>
+      <td><span class="tdt" title="${a.title}">${a.title}</span></td>
+      <td><span class="badge ${axisClass(a.axis)}" style="font-size:9.5px">${a.axis}</span></td>
+      <td style="font-size:11px;color:var(--txm);white-space:nowrap">${a.impact_factor||'—'}</td>
+      <td>${statusBadge(a.status)}</td>
+      <td><button class="btn btn-g btn-sm" onclick="viewArticle(${a.id})">Ver</button></td>
+    </tr>`).join('') || `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--txd)">Nenhum artigo encontrado</td></tr>`;
+}
+
+function viewArticle(id) {
+  const a = allArticles.find(x=>x.id===id);
+  if(!a) return;
+  $('m-art-title').textContent = a.title;
+  $('m-art-body').innerHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+      <span class="badge b-gy">${a.year||'—'}</span>
+      <span class="badge ${axisClass(a.axis)}">${a.axis}</span>
+      ${statusBadge(a.status)}
+      <span class="badge b-gy">${a.type||'Artigo'}</span>
+      ${a.impact_factor?`<span class="badge b-cy">${a.impact_factor}</span>`:''}
+    </div>
+    <div class="ds"><div class="dl">Autor</div><div class="dv">${a.author}</div></div>
+    ${a.objective?`<div class="ds"><div class="dl">Objetivo</div><div class="dv">${a.objective}</div></div>`:''}
+    ${a.methodology?`<div class="ds"><div class="dl">Metodologia</div><div class="dv">${a.methodology}</div></div>`:''}
+    ${a.findings?`<div class="ds"><div class="dl">Achados Principais</div><div class="dv">${a.findings}</div></div>`:''}
+    ${a.relevance?`<div class="ds"><div class="dl">Relevância para o Mestrado</div><div class="dv" style="color:var(--am)">${a.relevance}</div></div>`:''}
+    ${a.notes?`<div class="ds"><div class="dl">Notas</div><div class="dv">${a.notes}</div></div>`:''}
+    ${!advisorMode.active?`<div class="fa" style="margin-top:12px">
+      <button class="btn btn-g btn-sm" onclick="openEditArticle(${a.id})">✏️ Editar</button>
+      <button class="btn btn-red btn-sm" onclick="deleteArticle(${a.id})">🗑 Excluir</button>
+    </div>`:''}`;
+  openMo('m-article');
+}
+
+function openAddArticle() {
+  ['na-id','na-author','na-year','na-title','na-if','na-obj','na-meth','na-findings','na-rel'].forEach(id=>$(id).value='');
+  $('na-type').value='Artigo'; $('na-status').value='Lido';
+  $('m-art-add-title').textContent='Adicionar Artigo';
+  openMo('m-art-add');
+}
+
+function openEditArticle(id) {
+  const a = allArticles.find(x=>x.id===id);
+  if(!a) return;
+  closeMo('m-article');
+  $('na-id').value=a.id; $('na-author').value=a.author||'';
+  $('na-year').value=a.year||''; $('na-title').value=a.title||'';
+  $('na-if').value=a.impact_factor||''; $('na-obj').value=a.objective||'';
+  $('na-meth').value=a.methodology||''; $('na-findings').value=a.findings||'';
+  $('na-rel').value=a.relevance||''; $('na-status').value=a.status||'Lido';
+  $('na-axis').value=a.axis||'Sistemas Complexos'; $('na-type').value=a.type||'Artigo';
+  $('m-art-add-title').textContent='Editar Artigo';
+  openMo('m-art-add');
+}
+
+async function saveArticle() {
+  const id = $('na-id').value;
+  const payload = {
+    author:$('na-author').value.trim(), year:+$('na-year').value||null,
+    title:$('na-title').value.trim(), type:$('na-type').value,
+    axis:$('na-axis').value, status:$('na-status').value,
+    impact_factor:$('na-if').value.trim(), objective:$('na-obj').value.trim(),
+    methodology:$('na-meth').value.trim(), findings:$('na-findings').value.trim(),
+    relevance:$('na-rel').value.trim(), updated_at:new Date().toISOString()
+  };
+  if(!payload.title||!payload.author){toast('Preencha título e autor','err');return;}
+  const {error} = id ? await db.from('articles').update(payload).eq('id',id)
+                      : await db.from('articles').insert(payload);
+  if(error){toast('Erro ao salvar','err');return;}
+  toast(id?'Artigo atualizado!':'Artigo adicionado!');
+  closeMo('m-art-add');
+  renderArticles();
+}
+
+async function deleteArticle(id) {
+  if(!confirm('Excluir este artigo?')) return;
+  await db.from('articles').delete().eq('id',id);
+  toast('Artigo excluído');
+  closeMo('m-article');
+  renderArticles();
+}
+
+function exportCSV() {
+  const h = ['ID','Autor','Ano','Título','Tipo','Eixo','Impacto','Status','Objetivo','Metodologia','Achados','Relevância'];
+  const rows = allArticles.map(a=>[a.id,a.author,a.year,a.title,a.type,a.axis,a.impact_factor,a.status,a.objective,a.methodology,a.findings,a.relevance]
+    .map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const blob = new Blob([[h.join(','),...rows].join('\n')],{type:'text/csv'});
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=u; a.download='fichamento-mestrado.csv'; a.click();
+}
+
+// ============================================================
+// KANBAN
+// ============================================================
+const COLS = [
+  {id:'backlog',label:'Backlog',color:'var(--txd)'},
+  {id:'todo',label:'A Fazer',color:'var(--am)'},
+  {id:'doing',label:'Em Andamento',color:'var(--ac)'},
+  {id:'done',label:'Concluído',color:'var(--gr)'}
+];
+
+async function renderKanban() {
+  const {data, error} = await db.from('tasks').select('*').order('created_at');
+  setSyncStatus(!error);
+  const tasks = data || [];
+
+  $('app-content').innerHTML = `
+  <div class="flex-b" style="margin-bottom:16px">
+    <div class="stitle" style="margin:0">🗂️ Kanban do Mestrado</div>
+    ${!advisorMode.active?`<button class="btn btn-p btn-sm" onclick="openAddTask()">+ Nova Atividade</button>`:''}
+  </div>
+  <div class="kb">
+    ${COLS.map(col=>{
+      const cards = tasks.filter(t=>t.column_id===col.id);
+      return `<div class="kc">
+        <div class="kch">
+          <div class="kd" style="background:${col.color}"></div>
+          <span class="kct" style="color:${col.color}">${col.label}</span>
+          <span class="kcc">${cards.length}</span>
+        </div>
+        <div class="kcards">
+          ${cards.map(t=>`<div class="kcard" onclick="viewTask(${t.id})">
+            <div class="kcard-t">${t.title}</div>
+            <div class="kcard-m">
+              ${catBadge(t.category||'Outro')}
+              ${t.priority!=='Normal'?priBadge(t.priority):''}
+              ${t.due_date?`<span class="txd" style="font-size:10px">📅 ${fmtDate(t.due_date)}</span>`:''}
+            </div>
+          </div>`).join('')}
+        </div>
+        ${!advisorMode.active?`<button class="kadd" onclick="openAddTask('${col.id}')">+ Adicionar</button>`:''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function openAddTask(col='todo') {
+  $('t-id').value=''; $('t-title').value=''; $('t-desc').value='';
+  $('t-due').value=''; $('t-col').value=col;
+  $('t-cat').value='Publicação'; $('t-pri').value='Normal';
+  $('m-task-title').textContent='Nova Atividade';
+  openMo('m-task');
+}
+
+async function viewTask(id) {
+  const {data} = await db.from('tasks').select('*').eq('id',id).single();
+  if(!data) return;
+  const t = data;
+  if(advisorMode.active) {
+    alert(`${t.title}\n\n${t.description||''}\n\nCategoria: ${t.category} | Prioridade: ${t.priority}\nPrazo: ${t.due_date?fmtDate(t.due_date):'—'}`);
+    return;
+  }
+  $('t-id').value=t.id; $('t-title').value=t.title||'';
+  $('t-desc').value=t.description||''; $('t-due').value=t.due_date||'';
+  $('t-col').value=t.column_id||'todo'; $('t-cat').value=t.category||'Outro';
+  $('t-pri').value=t.priority||'Normal';
+  $('m-task-title').textContent='Editar Atividade';
+  openMo('m-task');
+}
+
+async function saveTask() {
+  const id = $('t-id').value;
+  const payload = {
+    title:$('t-title').value.trim(), description:$('t-desc').value.trim(),
+    category:$('t-cat').value, priority:$('t-pri').value,
+    column_id:$('t-col').value, due_date:$('t-due').value||null,
+    updated_at:new Date().toISOString()
+  };
+  if(!payload.title){toast('Preencha o título','err');return;}
+  const {error} = id ? await db.from('tasks').update(payload).eq('id',id)
+                     : await db.from('tasks').insert(payload);
+  if(error){toast('Erro ao salvar','err');return;}
+  toast(id?'Atividade atualizada!':'Atividade criada!');
+  closeMo('m-task');
+  renderKanban();
+}
+
+// ============================================================
+// CALENDAR
+// ============================================================
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+
+async function renderCalendar() {
+  const {data, error} = await db.from('events').select('*');
+  setSyncStatus(!error);
+  const events = data || [];
+  renderCalendarUI(events);
+}
+
+function renderCalendarUI(events) {
+  const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const DAYS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const first = new Date(calYear, calMonth, 1);
+  const lastDay = new Date(calYear, calMonth+1, 0).getDate();
+  const startDow = first.getDay();
+  const todayStr = today();
+
+  const evMap = {};
+  events.forEach(ev=>{ const d=ev.event_date; if(!evMap[d]) evMap[d]=[]; evMap[d].push(ev); });
+
+  let days = '';
+  for(let i=0;i<startDow;i++) days+=`<div class="cd om"></div>`;
+  for(let d=1;d<=lastDay;d++){
+    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = ds===todayStr;
+    const dayEvs = evMap[ds]||[];
+    days+=`<div class="cd${isToday?' today':''}">
+      <div class="cd-num">${d}</div>
+      ${dayEvs.slice(0,3).map(ev=>`<div class="cev ${ev.type}" title="${ev.title}">${ev.title}</div>`).join('')}
+      ${dayEvs.length>3?`<div style="font-size:9px;color:var(--txd)">+${dayEvs.length-3}</div>`:''}
+    </div>`;
+  }
+
+  const upcoming = events.filter(e=>e.event_date>=todayStr).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,8);
+
+  $('app-content').innerHTML = `
+  <div class="flex-b" style="margin-bottom:14px">
+    <div class="stitle" style="margin:0">📅 Calendário do Mestrado</div>
+    ${!advisorMode.active?`<button class="btn btn-p btn-sm" onclick="openAddEvent()">+ Novo Evento</button>`:''}
+  </div>
+  <div class="cal-hdr">
+    <div class="cal-nav">
+      <button class="btn btn-g btn-sm" onclick="calNav(-1)">‹</button>
+      <span class="cal-title">${MONTHS[calMonth]} ${calYear}</span>
+      <button class="btn btn-g btn-sm" onclick="calNav(1)">›</button>
+    </div>
+    <button class="btn btn-g btn-sm" onclick="calToday()">Hoje</button>
+  </div>
+  <div class="cal-grid">
+    ${DAYS.map(d=>`<div class="cdn">${d}</div>`).join('')}
+    ${days}
+  </div>
+  <div style="margin-top:18px">
+    <div class="stitle">Próximos Eventos</div>
+    <div class="tw"><table>
+      <thead><tr><th>Data</th><th>Tipo</th><th>Evento</th><th>Notas</th>${!advisorMode.active?'<th></th>':''}</tr></thead>
+      <tbody>${upcoming.map(ev=>`<tr>
+        <td style="white-space:nowrap">${fmtDate(ev.event_date)}</td>
+        <td><span class="badge cev ${ev.type}">${eventLabel(ev.type)}</span></td>
+        <td>${ev.title}</td>
+        <td class="txm" style="font-size:11px">${ev.notes||''}</td>
+        ${!advisorMode.active?`<td><button class="btn btn-red btn-sm" onclick="deleteEvent(${ev.id})">🗑</button></td>`:''}
+      </tr>`).join('')||`<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--txd)">Nenhum evento próximo</td></tr>`}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if(calMonth>11){calMonth=0;calYear++;}
+  if(calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+function calToday(){calYear=new Date().getFullYear();calMonth=new Date().getMonth();renderCalendar();}
+
+function openAddEvent() {
+  $('e-id').value=''; $('e-title').value=''; $('e-date').value=''; $('e-notes').value='';
+  openMo('m-event');
+}
+
+async function saveEvent() {
+  const payload = {
+    title:$('e-title').value.trim(), event_date:$('e-date').value,
+    type:$('e-type').value, notes:$('e-notes').value.trim()
+  };
+  if(!payload.title||!payload.event_date){toast('Preencha título e data','err');return;}
+  const {error} = await db.from('events').insert(payload);
+  if(error){toast('Erro ao salvar','err');return;}
+  toast('Evento criado!');
+  closeMo('m-event');
+  renderCalendar();
+}
+
+async function deleteEvent(id) {
+  if(!confirm('Excluir evento?')) return;
+  await db.from('events').delete().eq('id',id);
+  toast('Evento excluído');
+  renderCalendar();
+}
+
+// ============================================================
+// CERTIFICATES
+// ============================================================
+async function renderCerts() {
+  const {data, error} = await db.from('certificates').select('*').order('created_at',{ascending:false});
+  setSyncStatus(!error);
+  const certs = data || [];
+  const totalHrs = certs.reduce((s,c)=>s+(+c.hours||0),0);
+
+  $('app-content').innerHTML = `
+  <div class="flex-b" style="margin-bottom:16px">
+    <div>
+      <div class="stitle" style="margin:0">🏅 Certificados & Horas Complementares</div>
+      <div class="txd" style="margin-top:3px">Total: <strong style="color:var(--am)">${totalHrs}h</strong> em ${certs.length} certificados</div>
+    </div>
+    ${!advisorMode.active?`<button class="btn btn-p btn-sm" onclick="openAddCert()">+ Adicionar</button>`:''}
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Evento</th><th>Data</th><th>Tipo</th><th>Horas</th><th>Notas</th>${!advisorMode.active?'<th></th>':''}</tr></thead>
+    <tbody>${certs.map(c=>`<tr>
+      <td style="font-weight:500">${c.event_name}</td>
+      <td style="white-space:nowrap">${fmtDate(c.event_date)}</td>
+      <td><span class="badge b-gy">${c.type}</span></td>
+      <td><span class="badge b-am">${c.hours||0}h</span></td>
+      <td class="txm" style="font-size:11px">${c.notes||''}</td>
+      ${!advisorMode.active?`<td><button class="btn btn-red btn-sm" onclick="deleteCert(${c.id})">🗑</button></td>`:''}
+    </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--txd)">Nenhum certificado cadastrado</td></tr>`}
+    </tbody>
+  </table></div>`;
+}
+
+function openAddCert() {
+  $('c-id').value=''; $('c-event').value=''; $('c-date').value='';
+  $('c-hrs').value=''; $('c-notes').value='';
+  openMo('m-cert');
+}
+
+async function saveCert() {
+  const payload = {
+    event_name:$('c-event').value.trim(), event_date:$('c-date').value||null,
+    hours:+$('c-hrs').value||0, type:$('c-type').value, notes:$('c-notes').value.trim()
+  };
+  if(!payload.event_name){toast('Preencha o nome do evento','err');return;}
+  const {error} = await db.from('certificates').insert(payload);
+  if(error){toast('Erro ao salvar','err');return;}
+  toast('Certificado salvo!');
+  closeMo('m-cert');
+  renderCerts();
+}
+
+async function deleteCert(id) {
+  if(!confirm('Excluir certificado?')) return;
+  await db.from('certificates').delete().eq('id',id);
+  toast('Certificado excluído');
+  renderCerts();
+}
+
+// ============================================================
+// FILES / DOCUMENTS
+// ============================================================
+async function renderFiles() {
+  const {data, error} = await db.from('documents').select('*').order('created_at',{ascending:false});
+  setSyncStatus(!error);
+  const docs = data || [];
+
+  const STATIC_DOCS = [
+    {title:'Pré-Projeto de Mestrado',desc:'Documento oficial com 6 hipóteses',cat:'Mestrado',icon:'📄',url:''},
+    {title:'Estratégia Final Integrada 2026-2027',desc:'12 artigos, 30 eventos, cronograma completo',cat:'Estratégia',icon:'📋',url:''},
+    {title:'Fichamento de Artigos Completo',desc:'55 artigos fichados em colunas padronizadas',cat:'Pesquisa',icon:'📚',url:''},
+    {title:'Cronograma Integrado 2026-2027',desc:'Timeline detalhada com datas de submissão',cat:'Planejamento',icon:'📅',url:''},
+    {title:'Mapeamento de Eventos 2026-2027',desc:'Revistas e eventos internacionais para submissão',cat:'Pesquisa',icon:'🎯',url:''},
+    {title:'Documentação Científica DataMetrics v4.3',desc:'Documentação técnica do sistema DataMetrics',cat:'Técnico',icon:'🔧',url:''},
+    {title:'Guia de Implementação API Stamina v4.3',desc:'Guia técnico de implementação da API Stamina',cat:'Técnico',icon:'⚡',url:''},
+    {title:'Acessos Gratuitos UFMS',desc:'Ferramentas, bases de dados e recursos disponíveis',cat:'Recursos',icon:'🔓',url:''},
+  ];
+
+  $('app-content').innerHTML = `
+  <div class="flex-b" style="margin-bottom:16px">
+    <div class="stitle" style="margin:0">📁 Documentos do Mestrado</div>
+    ${!advisorMode.active?`<button class="btn btn-p btn-sm" onclick="$('doc-input').click()">⬆ Upload</button>`:''}
+  </div>
+  <div class="stitle" style="color:var(--txm);font-size:12px;margin-bottom:8px;font-family:'DM Sans',sans-serif;font-weight:400">Documentos Estratégicos</div>
+  <div class="g2" style="margin-bottom:20px">
+    ${STATIC_DOCS.map(d=>`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:var(--rs);padding:12px;display:flex;align-items:flex-start;gap:10px">
+      <span style="font-size:24px">${d.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12.5px;font-weight:500">${d.title}</div>
+        <div class="txd" style="font-size:10.5px;margin-top:2px">${d.desc}</div>
+        <span class="badge b-gy" style="margin-top:6px;font-size:9.5px">${d.cat}</span>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="flex-b" style="margin-bottom:10px">
+    <div class="stitle" style="margin:0">Uploads (${docs.length})</div>
+  </div>
+  <div class="fl">
+    ${docs.length ? docs.map(d=>`<div class="fi">
+      <span style="font-size:22px">${fileIcon(d.file_name)}</span>
+      <div class="fi-info">
+        <div class="fi-name">${d.title||d.file_name}</div>
+        <div class="fi-meta">${d.category||'Geral'} · ${d.file_size?formatSize(d.file_size):''} · ${fmtDate(d.created_at)}</div>
+        ${d.description?`<div class="txd" style="font-size:10.5px;margin-top:2px">${d.description}</div>`:''}
+      </div>
+      ${d.file_url?`<a href="${d.file_url}" target="_blank" class="btn btn-g btn-sm">⬇</a>`:''}
+      ${!advisorMode.active?`<button class="btn btn-red btn-sm" onclick="deleteDoc(${d.id})">🗑</button>`:''}
+    </div>`).join('') : '<div class="empty"><div style="font-size:28px;margin-bottom:8px">📂</div><div class="txd">Nenhum arquivo enviado ainda</div><div class="txd" style="font-size:10.5px;margin-top:4px">Clique em "Upload" para adicionar PDFs, documentos e mais</div></div>'}
+  </div>`;
+}
+
+function fileIcon(name='') {
+  const ext = name.split('.').pop().toLowerCase();
+  const m={pdf:'📄',docx:'📝',doc:'📝',xlsx:'📊',csv:'📊',png:'🖼',jpg:'🖼',jpeg:'🖼',md:'📋',txt:'📃',pptx:'📊'};
+  return m[ext]||'📎';
+}
+function formatSize(b) {
+  if(b>1048576) return (b/1048576).toFixed(1)+'MB';
+  return (b/1024).toFixed(0)+'KB';
+}
+
+async function handleDocUpload(input) {
+  const files = Array.from(input.files);
+  for(const file of files) {
+    const payload = {title:file.name,file_name:file.name,file_size:file.size,category:'Upload',created_at:new Date().toISOString()};
+    await db.from('documents').insert(payload);
+    toast(`${file.name} registrado!`);
+  }
+  input.value='';
+  renderFiles();
+}
+
+async function deleteDoc(id) {
+  if(!confirm('Excluir documento?')) return;
+  await db.from('documents').delete().eq('id',id);
+  toast('Documento excluído');
+  renderFiles();
+}
+
+// ============================================================
+// ADVISOR VIEW
+// ============================================================
+async function renderAdvisor() {
+  const [arts, tasks, events, certs] = await Promise.all([
+    db.from('articles').select('*'),
+    db.from('tasks').select('*'),
+    db.from('events').select('*').order('event_date'),
+    db.from('certificates').select('*')
+  ]);
+  const a = arts.data||[], t = tasks.data||[], e = events.data||[], c = certs.data||[];
+  const lido = a.filter(x=>x.status==='Lido').length;
+  const done = t.filter(x=>x.column_id==='done').length;
+  const doing = t.filter(x=>x.column_id==='doing').length;
+  const hrs = c.reduce((s,x)=>s+(+x.hours||0),0);
+  const next = e.filter(x=>x.event_date>=today()).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,6);
+
+  $('app-content').innerHTML = `
+  <div style="background:linear-gradient(135deg,var(--pud),var(--acd));border:1px solid var(--pu);border-radius:var(--r);padding:14px 18px;margin-bottom:20px">
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:3px">👨‍🏫 Painel do Orientador</div>
+    <div class="txm">Prof. Dr. Cássio Pinho dos Reis — Visão de progresso do Dr. Pedro Santos · Mestrado UFMS</div>
+    <div class="txd" style="margin-top:3px;font-size:10px">Atualizado em tempo real · ${new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+  </div>
+  <div class="sg" style="margin-bottom:20px">
+    <div class="sc" style="--c:var(--ac)"><div class="sv">${lido}/${a.length}</div><div class="sl">Artigos Lidos</div><div class="sp">${((lido/a.length)*100).toFixed(0)}% do fichamento</div></div>
+    <div class="sc" style="--c:var(--gr)"><div class="sv">${done}/${t.length}</div><div class="sl">Tarefas Concluídas</div><div class="sp">${doing} em andamento</div></div>
+    <div class="sc" style="--c:var(--pu)"><div class="sv">${next.length}</div><div class="sl">Próximos Eventos</div><div class="sp">nos próximos meses</div></div>
+    <div class="sc" style="--c:var(--am)"><div class="sv">${hrs}h</div><div class="sl">Horas Complementares</div><div class="sp">${c.length} certificados</div></div>
+  </div>
+  <div class="g2" style="margin-bottom:18px">
+    <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+      <div class="stitle">📅 Próximas Entregas & Eventos</div>
+      ${next.map(ev=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd)">
+        <span class="badge cev ${ev.type}">${eventLabel(ev.type)}</span>
+        <span style="font-size:12px;flex:1">${ev.title}</span>
+        <span class="txd" style="font-size:10.5px;white-space:nowrap">${fmtDate(ev.event_date)}</span>
+      </div>`).join('')||'<div class="txd" style="padding:12px 0">Nenhum evento cadastrado</div>'}
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+      <div class="stitle">🗂️ Status do Kanban</div>
+      ${COLS.map(col=>{
+        const count = t.filter(x=>x.column_id===col.id).length;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)">
+          <span style="font-size:12px;color:${col.color}">${col.label}</span>
+          <span class="badge b-gy">${count}</span>
+        </div>`;
+      }).join('')}
+      <div class="divider" style="margin:10px 0"></div>
+      <div class="stitle" style="font-size:12px;margin-bottom:8px">Em Andamento</div>
+      ${t.filter(x=>x.column_id==='doing').map(x=>`<div style="font-size:12px;padding:4px 0;color:var(--txm)">→ ${x.title}</div>`).join('')||'<div class="txd" style="font-size:11px">Nenhuma tarefa em andamento</div>'}
+    </div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
+    <div class="stitle">📚 Progresso por Eixo Temático</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      ${Object.entries(a.reduce((m,x)=>{m[x.axis]=(m[x.axis]||0)+1;return m},{})).sort((a,b)=>b[1]-a[1]).map(([axis,count])=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span class="badge ${axisClass(axis)}" style="font-size:9.5px">${axis}</span>
+            <span class="txd">${count} artigos</span>
+          </div>
+          <div class="pb"><div class="pf" style="width:${(count/a.length*100).toFixed(0)}%"></div></div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  renderDashboard();
+  // close modals on overlay click
+  document.querySelectorAll('.mo').forEach(mo => {
+    mo.addEventListener('click', e => { if(e.target===mo) mo.classList.remove('open'); });
+  });
+});
+</script>
+
+</body>
+</html>
