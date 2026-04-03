@@ -23,7 +23,8 @@ body{font-family:'Inter',sans-serif;font-size:13px;background:var(--bg);color:va
 .auth-tabs{display:flex;border-bottom:1px solid var(–bd);margin-bottom:24px}
 .auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;color:var(–txd);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;user-select:none}
 .auth-tab.active{color:var(–tx);border-bottom-color:var(–tx)}
-.auth-form{display:flex;flex-direction:column;gap:13px}
+.auth-err{background:var(–dgl);color:var(–dg);border:1px solid var(–dg);border-radius:var(–rs);padding:8px 12px;font-size:12px;display:none;margin-bottom:4px}
+.auth-err.show{display:block}
 .auth-footer{text-align:center;margin-top:18px;font-size:11px;color:var(–txd)}
 
 /* ONBOARDING */
@@ -210,12 +211,14 @@ input:checked+.ttr::before{transform:translateX(16px)}
       <div class="auth-tab active" onclick="switchTab('login')">Entrar</div>
       <div class="auth-tab" onclick="switchTab('register')">Criar conta</div>
     </div>
-    <div id="auth-login" class="auth-form" style="display:flex">
+    <div id="auth-login" style="display:flex;flex-direction:column;gap:13px">
+      <div class="auth-err" id="login-err"></div>
       <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
       <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-p" onclick="doLogin()" style="width:100%;justify-content:center;padding:9px">Entrar</button>
     </div>
-    <div id="auth-register" class="auth-form" style="display:none">
+    <div id="auth-register" style="display:none;flex-direction:column;gap:13px">
+      <div class="auth-err" id="reg-err"></div>
       <div><label>Nome completo *</label><input id="r-name" placeholder="Ex: Pedro Santos"></div>
       <div><label>Email *</label><input type="email" id="r-email" placeholder="seu@email.com" autocomplete="email"></div>
       <div><label>Senha * (mínimo 6 caracteres)</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
@@ -422,22 +425,57 @@ const LEVELS=['Graduação','Especialização / MBA','Mestrado','Doutorado','Pó
 // ── AUTH ──
 function switchTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0)===(tab==='login')));
-  $('auth-login').style.display=tab==='login'?'flex':'none';
-  $('auth-register').style.display=tab==='register'?'flex':'none';
+  const login=$('auth-login'),reg=$('auth-register');
+  login.style.display=tab==='login'?'flex':'none';
+  login.style.flexDirection='column';login.style.gap='13px';
+  reg.style.display=tab==='register'?'flex':'none';
+  reg.style.flexDirection='column';reg.style.gap='13px';
+  $('login-err').className='auth-err';
+  $('reg-err').className='auth-err';
 }
 async function doLogin(){
   const email=$('l-email').value.trim(),pass=$('l-pass').value;
-  if(!email||!pass){toast('Preencha email e senha','err');return}
+  const err=$('login-err');
+  err.className='auth-err';
+  if(!email||!pass){err.textContent='Preencha email e senha.';err.className='auth-err show';return}
+  const btn=document.querySelector('#auth-login button');
+  btn.textContent='Entrando...';btn.disabled=true;
   const{error}=await db.auth.signInWithPassword({email,password:pass});
-  if(error){toast('Email ou senha incorretos','err')}
+  btn.textContent='Entrar';btn.disabled=false;
+  if(error){
+    if(error.message.includes('Invalid login')||error.message.includes('invalid')){
+      err.textContent='Email ou senha incorretos. Verifique seus dados.';
+    } else if(error.message.includes('Email not confirmed')){
+      err.textContent='Confirme seu email antes de entrar.';
+    } else {
+      err.textContent='Erro ao entrar. Tente novamente.';
+    }
+    err.className='auth-err show';
+  }
 }
 async function doRegister(){
   const name=$('r-name').value.trim(),email=$('r-email').value.trim(),pass=$('r-pass').value;
-  if(!name||!email||!pass){toast('Preencha os campos obrigatórios','err');return}
-  if(pass.length<6){toast('Senha mínimo 6 caracteres','err');return}
+  const err=$('reg-err');
+  err.className='auth-err';
+  if(!name){err.textContent='Preencha seu nome completo.';err.className='auth-err show';return}
+  if(!email){err.textContent='Preencha seu email.';err.className='auth-err show';return}
+  if(!pass){err.textContent='Crie uma senha.';err.className='auth-err show';return}
+  if(pass.length<6){err.textContent='A senha deve ter no mínimo 6 caracteres.';err.className='auth-err show';return}
+  const btn=document.querySelector('#auth-register button');
+  btn.textContent='Criando conta...';btn.disabled=true;
   const{error}=await db.auth.signUp({email,password:pass,options:{data:{full_name:name,institution:$('r-inst').value.trim(),degree_level:$('r-level').value}}});
-  if(error){toast('Erro: '+error.message,'err');return}
-  toast('Conta criada! Faça login para continuar.')
+  btn.textContent='Criar conta gratuita';btn.disabled=false;
+  if(error){
+    if(error.message.includes('already registered')||error.message.includes('already been registered')){
+      err.textContent='Este email já está cadastrado. Faça login.';
+    } else if(error.message.includes('invalid email')){
+      err.textContent='Email inválido. Verifique o formato.';
+    } else {
+      err.textContent='Erro ao criar conta: '+error.message;
+    }
+    err.className='auth-err show';return;
+  }
+  toast('Conta criada! Faça login para continuar.');
   switchTab('login');
 }
 async function doLogout(){
