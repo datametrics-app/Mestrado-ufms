@@ -4,187 +4,256 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FichaAI</title>
+<title>fichaAI</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-:root{--bg:#fafafa;--s1:#fff;--s2:#f5f5f5;--s3:#eee;--bd:#e0e0e0;--bdd:#bdbdbd;--tx:#1a1a1a;--txm:#616161;--txd:#9e9e9e;--ac:#1a1a1a;--acl:#f0f0f0;--dg:#c62828;--dgl:#ffebee;--ok:#2e7d32;--okl:#e8f5e9;--wn:#e65100;--wnl:#fff3e0;--in:#1565c0;--inl:#e3f2fd;--r:8px;--rs:4px;--sh:0 1px 3px rgba(0,0,0,.1);--shm:0 4px 12px rgba(0,0,0,.1)}
-body.dark{--bg:#111;--s1:#1c1c1c;--s2:#242424;--s3:#2e2e2e;--bd:#333;--bdd:#444;--tx:#f0f0f0;--txm:#aaa;--txd:#666;--ac:#f0f0f0;--acl:#2e2e2e;--dg:#ef5350;--dgl:#1a0a0a;--ok:#66bb6a;--okl:#0a1a0a;--wn:#ffa726;--wnl:#1a1000;--in:#42a5f5;--inl:#0a1020}
+:root{--bg:#fafafa;--s1:#fff;--s2:#f5f5f5;--s3:#eee;--bd:#e0e0e0;--bdd:#bdbdbd;--tx:#1a1a1a;--txm:#616161;--txd:#9e9e9e;--acl:#f0f0f0;--dg:#c62828;--dgl:#ffebee;--ok:#2e7d32;--okl:#e8f5e9;--wn:#e65100;--wnl:#fff3e0;--in:#1565c0;--inl:#e3f2fd;--r:8px;--rs:4px;--sh:0 1px 3px rgba(0,0,0,.1);--shm:0 4px 16px rgba(0,0,0,.12)}
+body.dark{--bg:#111;--s1:#1c1c1c;--s2:#242424;--s3:#2e2e2e;--bd:#333;--bdd:#444;--tx:#f0f0f0;--txm:#aaa;--txd:#666;--acl:#2e2e2e;--dg:#ef5350;--dgl:#1a0a0a;--ok:#66bb6a;--okl:#0a1a0a;--wn:#ffa726;--wnl:#1a1000;--in:#42a5f5;--inl:#0a1020}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;font-size:13px;background:var(--bg);color:var(--tx);min-height:100vh;line-height:1.5}
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
-.auth-box{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:40px;width:100%;max-width:400px}
+
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(–bg);padding:20px}
+.auth-box{background:var(–s1);border:1px solid var(–bd);border-radius:12px;padding:40px;width:100%;max-width:400px;box-shadow:var(–shm)}
 .auth-logo{text-align:center;margin-bottom:28px}
-.auth-logo h1{font-size:22px;font-weight:700;letter-spacing:-.5px}
-.auth-logo p{font-size:12px;color:var(--txd);margin-top:4px}
-.auth-tabs{display:flex;border-bottom:1px solid var(--bd);margin-bottom:24px}
-.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:500;color:var(--txd);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
-.auth-tab.active{color:var(--tx);border-bottom-color:var(--tx)}
-.auth-form{display:flex;flex-direction:column;gap:14px}
-.auth-footer{text-align:center;margin-top:20px;font-size:11px;color:var(--txd)}
+.auth-logo h1{font-size:24px;font-weight:300;letter-spacing:-.5px;color:var(–tx)}
+.auth-logo h1 strong{font-weight:700}
+.auth-logo p{font-size:12px;color:var(–txd);margin-top:5px;font-style:italic}
+.auth-tabs{display:flex;border-bottom:1px solid var(–bd);margin-bottom:24px}
+.auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;color:var(–txd);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;user-select:none}
+.auth-tab.active{color:var(–tx);border-bottom-color:var(–tx)}
+.auth-form{display:flex;flex-direction:column;gap:13px}
+.auth-footer{text-align:center;margin-top:18px;font-size:11px;color:var(–txd)}
+
+/* ONBOARDING */
+.ob-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(–bg);padding:20px}
+.ob-box{background:var(–s1);border:1px solid var(–bd);border-radius:12px;padding:36px;width:100%;max-width:520px;box-shadow:var(–shm)}
+.ob-steps{display:flex;align-items:center;gap:6px;margin-bottom:28px}
+.ob-step{flex:1;height:3px;background:var(–bd);border-radius:2px;transition:background .3s}
+.ob-step.done{background:var(–tx)}
+.ob-title{font-size:17px;font-weight:600;margin-bottom:6px}
+.ob-sub{font-size:12.5px;color:var(–txm);margin-bottom:22px;line-height:1.5}
+.ob-nav{display:flex;gap:8px;justify-content:space-between;margin-top:24px;padding-top:20px;border-top:1px solid var(–bd)}
+
+/* APP */
 .app{display:flex;min-height:100vh}
-.sidebar{width:220px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
-.sb-header{padding:16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
-.sb-logo{font-size:15px;font-weight:700;letter-spacing:-.3px}
-.sb-logo span{color:var(--txd);font-weight:400}
+.sidebar{width:220px;background:var(–s1);border-right:1px solid var(–bd);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
+.sb-header{padding:14px 16px;border-bottom:1px solid var(–bd)}
+.sb-logo{font-size:15px;font-weight:300;letter-spacing:-.3px;color:var(–tx)}
+.sb-logo strong{font-weight:700}
 .sb-nav{flex:1;padding:8px;overflow-y:auto}
-.sb-sec{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txd);padding:10px 8px 4px}
-.nb{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:none;background:transparent;color:var(--txm);font-family:'Inter',sans-serif;font-size:13px;font-weight:400;border-radius:var(--rs);cursor:pointer;text-align:left;transition:all .12s}
-.nb:hover{background:var(--s2);color:var(--tx)}
-.nb.active{background:var(--acl);color:var(--tx);font-weight:500}
-.nb .ni{width:16px;text-align:center;font-size:13px;flex-shrink:0}
-.nb .nbx{margin-left:auto;background:var(--tx);color:var(--s1);font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px}
-.sb-footer{padding:12px 16px;border-top:1px solid var(--bd);display:flex;align-items:center;gap:8px}
-.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.sb-sec{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(–txd);padding:10px 8px 4px}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:none;background:transparent;color:var(–txm);font-family:‘Inter’,sans-serif;font-size:13px;font-weight:400;border-radius:var(–rs);cursor:pointer;text-align:left;transition:all .12s}
+.nb:hover{background:var(–s2);color:var(–tx)}
+.nb.active{background:var(–acl);color:var(–tx);font-weight:500}
+.nb .ni{width:16px;text-align:center;font-size:12px;flex-shrink:0;opacity:.6}
+.nb .nbx{margin-left:auto;background:var(–tx);color:var(–s1);font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px}
+.sb-footer{padding:12px 14px;border-top:1px solid var(–bd);display:flex;align-items:center;gap:8px}
+.sb-avatar{width:30px;height:30px;border-radius:50%;background:var(–s3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;overflow:hidden;cursor:pointer;border:1px solid var(–bd)}
+.sb-avatar img{width:100%;height:100%;object-fit:cover}
 .sb-user{flex:1;min-width:0}
 .sb-user-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-user-plan{font-size:10px;color:var(--txd)}
+.sb-user-plan{font-size:10px;color:var(–txd)}
 .main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{height:48px;background:var(--s1);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;gap:10px;position:sticky;top:0;z-index:50}
+.topbar{height:48px;background:var(–s1);border-bottom:1px solid var(–bd);display:flex;align-items:center;padding:0 20px;gap:10px;position:sticky;top:0;z-index:50}
 .topbar-title{font-size:14px;font-weight:600;flex:1}
 .content{padding:20px;flex:1}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--rs);border:1px solid transparent;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;text-decoration:none;line-height:1.4}
-.btn-p{background:var(--tx);color:var(--s1);border-color:var(--tx)}.btn-p:hover{opacity:.85}
-.btn-s{background:var(--s1);color:var(--tx);border-color:var(--bd)}.btn-s:hover{background:var(--s2)}
-.btn-d{background:var(--dgl);color:var(--dg);border-color:var(--dg)}.btn-d:hover{opacity:.85}
-.btn-g{background:transparent;color:var(--txm);border-color:transparent}.btn-g:hover{background:var(--s2);color:var(--tx)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(–rs);border:1px solid transparent;font-family:‘Inter’,sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .12s;white-space:nowrap;text-decoration:none;line-height:1.4}
+.btn-p{background:var(–tx);color:var(–s1);border-color:var(–tx)}.btn-p:hover{opacity:.82}
+.btn-s{background:var(–s1);color:var(–tx);border-color:var(–bd)}.btn-s:hover{background:var(–s2)}
+.btn-d{background:var(–dgl);color:var(–dg);border-color:var(–dg)}.btn-d:hover{opacity:.82}
+.btn-g{background:transparent;color:var(–txm);border-color:transparent}.btn-g:hover{background:var(–s2);color:var(–tx)}
 .btn-sm{padding:4px 8px;font-size:11px}
 .btn-xs{padding:2px 6px;font-size:10px}
-input,textarea,select{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;padding:7px 10px;width:100%;outline:none;transition:border-color .12s}
-input:focus,textarea:focus,select:focus{border-color:var(--tx)}
-select option{background:var(--s1)}
+
+/* FORMS */
+input,textarea,select{background:var(–s1);border:1px solid var(–bd);border-radius:var(–rs);color:var(–tx);font-family:‘Inter’,sans-serif;font-size:13px;padding:7px 10px;width:100%;outline:none;transition:border-color .12s}
+input:focus,textarea:focus,select:focus{border-color:var(–tx)}
+select option{background:var(–s1)}
 textarea{resize:vertical;min-height:72px}
-label{display:block;font-size:11px;color:var(--txm);margin-bottom:4px;font-weight:500}
+label{display:block;font-size:11px;color:var(–txm);margin-bottom:4px;font-weight:500}
 .fg{display:flex;flex-direction:column;gap:12px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fa{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
 .overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--s1);border:1px solid var(--bd);border-radius:10px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:translateY(8px);transition:transform .2s;box-shadow:var(--shm)}
+.modal{background:var(–s1);border:1px solid var(–bd);border-radius:10px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;transform:translateY(8px);transition:transform .2s;box-shadow:var(–shm)}
 .overlay.open .modal{transform:translateY(0)}
 .modal-lg{max-width:680px}
-.mh{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--s1);z-index:1}
+.mh{padding:16px 20px;border-bottom:1px solid var(–bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–s1);z-index:1}
 .mt{font-size:14px;font-weight:600}
-.mc{background:none;border:none;color:var(--txd);font-size:18px;cursor:pointer;line-height:1;padding:2px}.mc:hover{color:var(--tx)}
+.mc{background:none;border:none;color:var(–txd);font-size:20px;cursor:pointer;line-height:1;padding:2px;width:24px;height:24px;display:flex;align-items:center;justify-content:center}.mc:hover{color:var(–tx)}
 .mb{padding:20px}
-.mf{padding:14px 20px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.mf{padding:14px 20px;border-top:1px solid var(–bd);display:flex;gap:8px;justify-content:flex-end}
+
+/* STATS */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.sc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px}
+.sc{background:var(–s1);border:1px solid var(–bd);border-radius:var(–r);padding:14px 16px}
 .sv{font-size:22px;font-weight:700;line-height:1}
-.sl{font-size:11px;color:var(--txd);margin-top:4px}
-.ss{font-size:11px;color:var(--txm);margin-top:2px}
-.tw{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;overflow-x:auto}
+.sl{font-size:11px;color:var(–txd);margin-top:4px}
+.ss{font-size:11px;color:var(–txm);margin-top:2px}
+
+/* TABLE */
+.tw{border:1px solid var(–bd);border-radius:var(–r);overflow:hidden;overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead tr{background:var(--s2)}
-th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--txm);white-space:nowrap;border-bottom:1px solid var(--bd)}
-td{padding:9px 12px;border-top:1px solid var(--bd);color:var(--tx);vertical-align:middle}
-tbody tr:hover{background:var(--s2)}
+thead tr{background:var(–s2)}
+th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(–txm);white-space:nowrap;border-bottom:1px solid var(–bd)}
+td{padding:9px 12px;border-top:1px solid var(–bd);color:var(–tx);vertical-align:middle}
+tbody tr:hover{background:var(–s2)}
 .tdt{max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+
+/* BADGES */
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:10.5px;font-weight:500;white-space:nowrap;border:1px solid transparent}
-.b-def{background:var(--s2);color:var(--txm);border-color:var(--bd)}
-.b-info{background:var(--inl);color:var(--in)}
-.b-ok{background:var(--okl);color:var(--ok)}
-.b-wn{background:var(--wnl);color:var(--wn)}
-.b-dg{background:var(--dgl);color:var(--dg)}
+.b-def{background:var(–s2);color:var(–txm);border-color:var(–bd)}
+.b-info{background:var(–inl);color:var(–in)}
+.b-ok{background:var(–okl);color:var(–ok)}
+.b-wn{background:var(–wnl);color:var(–wn)}
+.b-dg{background:var(–dgl);color:var(–dg)}
+
+/* KANBAN */
 .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start}
-.kc{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
-.kch{padding:10px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bd);background:var(--s1)}
+.kc{background:var(–s2);border:1px solid var(–bd);border-radius:var(–r);overflow:hidden}
+.kch{padding:10px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(–bd);background:var(–s1)}
 .kcd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .kct{font-size:12px;font-weight:600;flex:1}
-.kcc{font-size:11px;color:var(--txd);background:var(--s2);padding:1px 6px;border-radius:10px;border:1px solid var(--bd)}
+.kcc{font-size:11px;color:var(–txd);background:var(–s2);padding:1px 6px;border-radius:10px;border:1px solid var(–bd)}
 .kcards{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:60px}
-.kcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;cursor:grab;transition:box-shadow .12s,border-color .12s;user-select:none}
-.kcard:hover{box-shadow:var(--sh);border-color:var(--bdd)}
+.kcard{background:var(–s1);border:1px solid var(–bd);border-radius:var(–rs);padding:10px;cursor:grab;transition:box-shadow .12s,border-color .12s;user-select:none}
+.kcard:hover{box-shadow:var(–sh);border-color:var(–bdd)}
 .kcard.dragging{opacity:.4;cursor:grabbing}
 .kcard-t{font-size:12.5px;font-weight:500;margin-bottom:6px;line-height:1.4}
 .kcard-m{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .kcard-a{display:flex;gap:4px;justify-content:flex-end;margin-top:8px}
-.kadd{width:calc(100% - 16px);margin:0 8px 8px;padding:6px;border:1px dashed var(--bd);background:transparent;color:var(--txd);font-size:11.5px;font-family:'Inter',sans-serif;border-radius:var(--rs);cursor:pointer;transition:all .12s}
-.kadd:hover{border-color:var(--tx);color:var(--tx);background:var(--acl)}
-.drop-zone{min-height:60px;border-radius:var(--rs);transition:background .12s}
-.drop-zone.da{background:var(--acl);border:2px dashed var(--bdd)}
+.kadd{width:calc(100% - 16px);margin:0 8px 8px;padding:6px;border:1px dashed var(–bd);background:transparent;color:var(–txd);font-size:11.5px;font-family:‘Inter’,sans-serif;border-radius:var(–rs);cursor:pointer;transition:all .12s}
+.kadd:hover{border-color:var(–tx);color:var(–tx);background:var(–acl)}
+.drop-zone{min-height:60px;border-radius:var(–rs);transition:background .12s}
+.drop-zone.da{background:var(–acl);border:2px dashed var(–bdd)}
+
+/* CALENDAR */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-month{font-size:14px;font-weight:600}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
-.cdn{background:var(--s2);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--txd);border-bottom:1px solid var(--bd)}
-.cd{background:var(--s1);padding:6px;min-height:72px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(–bd);border-radius:var(–r);overflow:hidden}
+.cdn{background:var(–s2);padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(–txd);border-bottom:1px solid var(–bd)}
+.cd{background:var(–s1);padding:6px;min-height:72px;border-right:1px solid var(–bd);border-bottom:1px solid var(–bd)}
 .cd:nth-child(7n){border-right:none}
-.cd.om{background:var(--s2);opacity:.5}
-.cd.td{background:var(--acl)}
-.cd-n{font-size:11px;color:var(--txm);margin-bottom:3px}
-.cd.td .cd-n{font-weight:700;color:var(--tx)}
+.cd.om{background:var(–s2);opacity:.5}
+.cd.td{background:var(–acl)}
+.cd-n{font-size:11px;color:var(–txm);margin-bottom:3px}
+.cd.td .cd-n{font-weight:700;color:var(–tx)}
 .cev{font-size:9.5px;padding:2px 4px;border-radius:2px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
-.ev-sub{background:var(--inl);color:var(--in)}.ev-pub{background:var(--okl);color:var(--ok)}
-.ev-dead{background:var(--wnl);color:var(--wn)}.ev-conf{background:var(--s3);color:var(--txm)}
+.ev-sub{background:var(–inl);color:var(–in)}.ev-pub{background:var(–okl);color:var(–ok)}
+.ev-dead{background:var(–wnl);color:var(–wn)}.ev-conf{background:var(–s3);color:var(–txm)}
+
+/* DOCS */
 .doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.doc-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .12s}
-.doc-card:hover{border-color:var(--bdd);box-shadow:var(--sh)}
-.oc{background:var(--s1);border:1px solid var(--bd);border-left:3px solid var(--tx);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px}
-.oc.oc-corr{border-left-color:var(--dg)}.oc.oc-aprov{border-left-color:var(--ok)}.oc.oc-alert{border-left-color:var(--wn)}
-.srch{position:relative}.srch input{padding-left:30px}.srch .si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--txd);font-size:13px;pointer-events:none}
+.doc-card{background:var(–s1);border:1px solid var(–bd);border-radius:var(–r);padding:14px;cursor:pointer;transition:all .12s}
+.doc-card:hover{border-color:var(–bdd);box-shadow:var(–sh)}
+
+/* ORIENT */
+.oc{background:var(–s1);border:1px solid var(–bd);border-left:3px solid var(–tx);border-radius:var(–rs);padding:12px 14px;margin-bottom:8px}
+.oc.oc-corr{border-left-color:var(–dg)}.oc.oc-aprov{border-left-color:var(–ok)}.oc.oc-alert{border-left-color:var(–wn)}
+
+/* AVATAR UPLOAD */
+.avatar-upload{position:relative;width:80px;height:80px;cursor:pointer}
+.avatar-upload img,.avatar-upload .av-placeholder{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(–bd)}
+.av-placeholder{background:var(–s3);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600;color:var(–txm)}
+.av-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;color:white;font-size:11px;font-weight:500}
+.avatar-upload:hover .av-overlay{opacity:1}
+
+/* MISC */
+.srch{position:relative}.srch input{padding-left:30px}.srch .si{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(–txd);font-size:13px;pointer-events:none}
 .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .filters .srch{flex:1;min-width:160px}.filters select{width:auto;min-width:130px}
-.divider{height:1px;background:var(--bd);margin:16px 0}
 .stitle{font-size:13px;font-weight:600;margin-bottom:10px}
-.empty{text-align:center;padding:36px 20px;color:var(--txd)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .fb{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .gap{margin-top:14px}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--tx);color:var(--s1);border-radius:var(--rs);padding:10px 16px;font-size:12.5px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .25s;pointer-events:none;max-width:280px}
-.toast.show{transform:translateY(0);opacity:1}.toast.err{background:var(--dg)}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--bd);border-top-color:var(--tx);border-radius:50%;animation:spin .6s linear infinite}
+.progress{height:4px;background:var(–s3);border-radius:2px;overflow:hidden}
+.pf{height:100%;background:var(–tx);border-radius:2px;transition:width .4s}
+.platform-card{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(–s1);border:1px solid var(–bd);border-radius:var(–rs);margin-bottom:6px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(–tx);color:var(–s1);border-radius:var(–rs);padding:10px 16px;font-size:12.5px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .25s;pointer-events:none;max-width:280px}
+.toast.show{transform:translateY(0);opacity:1}.toast.err{background:var(–dg)}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(–bd);border-top-color:var(–tx);border-radius:50%;animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .toggle{position:relative;display:inline-block;width:34px;height:18px}
 .toggle input{opacity:0;width:0;height:0}
-.ttr{position:absolute;inset:0;background:var(--bd);border-radius:9px;cursor:pointer;transition:.2s}
-.ttr::before{content:'';position:absolute;height:12px;width:12px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
-input:checked+.ttr{background:var(--tx)}
+.ttr{position:absolute;inset:0;background:var(–bd);border-radius:9px;cursor:pointer;transition:.2s}
+.ttr::before{content:’’;position:absolute;height:12px;width:12px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.2s}
+input:checked+.ttr{background:var(–tx)}
 input:checked+.ttr::before{transform:translateX(16px)}
-.ibtn{background:none;border:1px solid var(--bd);border-radius:var(--rs);padding:4px 8px;cursor:pointer;font-size:11px;font-family:'Inter',sans-serif;color:var(--txm);transition:all .12s}
-.ibtn:hover{background:var(--s2);color:var(--tx)}.ibtn.active{background:var(--acl);color:var(--tx);border-color:var(--bdd);font-weight:600}
-.progress{height:4px;background:var(--s3);border-radius:2px;overflow:hidden}
-.pf{height:100%;background:var(--tx);border-radius:2px;transition:width .4s}
-.platform-card{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:6px}
-.menu-toggle{display:none;background:none;border:none;font-size:18px;cursor:pointer;color:var(--tx)}
+.ibtn{background:none;border:1px solid var(–bd);border-radius:var(–rs);padding:4px 8px;cursor:pointer;font-size:11px;font-family:‘Inter’,sans-serif;color:var(–txm);transition:all .12s}
+.ibtn:hover{background:var(–s2);color:var(–tx)}.ibtn.active{background:var(–acl);color:var(–tx);border-color:var(–bdd);font-weight:600}
+.menu-toggle{display:none;background:none;border:none;font-size:18px;cursor:pointer;color:var(–tx)}
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 @media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.sb-overlay.show{display:block}.main{margin-left:0}.kanban{grid-template-columns:1fr 1fr}.menu-toggle{display:block}.content{padding:14px}.topbar{padding:0 14px}}
 @media(max-width:560px){.kanban{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.sg{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
 .view{animation:fi .15s ease}
 @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 </style>
+
 </head>
 <body>
+
+<!-- AUTH -->
+
 <div id="auth-screen" class="auth-wrap">
   <div class="auth-box">
     <div class="auth-logo">
-      <h1>ficha<span style="font-weight:300;color:var(--txm)">AI</span></h1>
+      <h1>ficha<strong>AI</strong></h1>
       <p>Você pesquisa. A gente organiza.</p>
     </div>
     <div class="auth-tabs">
       <div class="auth-tab active" onclick="switchTab('login')">Entrar</div>
       <div class="auth-tab" onclick="switchTab('register')">Criar conta</div>
     </div>
-    <div id="auth-login" class="auth-form">
-      <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com"></div>
-      <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+    <div id="auth-login" class="auth-form" style="display:flex">
+      <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
+      <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-p" onclick="doLogin()" style="width:100%;justify-content:center;padding:9px">Entrar</button>
     </div>
     <div id="auth-register" class="auth-form" style="display:none">
-      <div><label>Nome completo</label><input id="r-name" placeholder="Dr. Pedro Santos"></div>
-      <div><label>Email</label><input type="email" id="r-email" placeholder="seu@email.com"></div>
-      <div><label>Senha</label><input type="password" id="r-pass" placeholder="Mínimo 6 caracteres"></div>
-      <div><label>Instituição</label><input id="r-inst" placeholder="UFMS, USP..."></div>
-      <div><label>Nível</label><select id="r-level"><option>Mestrado</option><option>Doutorado</option><option>Pós-doutorado</option><option>Orientador</option><option>Pesquisador</option></select></div>
+      <div><label>Nome completo *</label><input id="r-name" placeholder="Ex: Pedro Santos"></div>
+      <div><label>Email *</label><input type="email" id="r-email" placeholder="seu@email.com" autocomplete="email"></div>
+      <div><label>Senha * (mínimo 6 caracteres)</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
+      <div><label>Instituição</label><input id="r-inst" placeholder="UFMS, USP, UNICAMP..."></div>
+      <div><label>Nível acadêmico</label>
+        <select id="r-level">
+          <option>Graduação</option>
+          <option>Especialização / MBA</option>
+          <option selected>Mestrado</option>
+          <option>Doutorado</option>
+          <option>Pós-doutorado</option>
+          <option>Orientador / Professor</option>
+          <option>Pesquisador Independente</option>
+        </select>
+      </div>
       <button class="btn btn-p" onclick="doRegister()" style="width:100%;justify-content:center;padding:9px">Criar conta gratuita</button>
     </div>
-    <div class="auth-footer">Ao continuar você concorda com os Termos de Uso</div>
+    <div class="auth-footer">Ao continuar você concorda com os Termos de Uso e Política de Privacidade</div>
   </div>
 </div>
+
+<!-- ONBOARDING -->
+
+<div id="ob-screen" style="display:none" class="ob-wrap">
+  <div class="ob-box">
+    <div class="ob-steps" id="ob-steps"></div>
+    <div id="ob-content"></div>
+  </div>
+</div>
+
+<!-- APP -->
 
 <div id="app-screen" style="display:none">
 <div class="app">
 <aside class="sidebar" id="sidebar">
-  <div class="sb-header"><div class="sb-logo">Ficha<span>AI</span></div></div>
+  <div class="sb-header">
+    <div class="sb-logo">ficha<strong>AI</strong></div>
+  </div>
   <nav class="sb-nav">
     <div class="sb-sec">Visão Geral</div>
     <button class="nb active" onclick="go('dashboard')"><span class="ni">▪</span>Dashboard</button>
@@ -195,13 +264,16 @@ input:checked+.ttr::before{transform:translateX(16px)}
     <div class="sb-sec">Gestão</div>
     <button class="nb" onclick="go('kanban')"><span class="ni">▪</span>Kanban</button>
     <button class="nb" onclick="go('certs')"><span class="ni">▪</span>Certificados</button>
-    <div class="sb-sec">Perfil</div>
+    <div class="sb-sec">Conta</div>
     <button class="nb" onclick="go('profile')"><span class="ni">▪</span>Meu Perfil</button>
     <button class="nb" onclick="go('advisor')"><span class="ni">▪</span>Orientador</button>
   </nav>
   <div class="sb-footer">
-    <div class="sb-avatar" id="sb-av">?</div>
-    <div class="sb-user"><div class="sb-user-name" id="sb-nm">—</div><div class="sb-user-plan">Plano Gratuito</div></div>
+    <div class="sb-avatar" id="sb-av" onclick="go('profile')" title="Editar perfil"></div>
+    <div class="sb-user">
+      <div class="sb-user-name" id="sb-nm">—</div>
+      <div class="sb-user-plan" id="sb-level">Plano Gratuito</div>
+    </div>
     <button class="btn btn-g btn-sm" onclick="doLogout()" title="Sair">↩</button>
   </div>
 </aside>
@@ -215,12 +287,17 @@ input:checked+.ttr::before{transform:translateX(16px)}
       <button class="ibtn" id="fs-lg" onclick="setFs('lg')">A+</button>
       <button class="ibtn" id="th-light" onclick="setTheme('light')">☀</button>
       <button class="ibtn" id="th-dark" onclick="setTheme('dark')">☽</button>
-      <label class="toggle" title="Modo Orientador"><input type="checkbox" id="adv-toggle" onchange="toggleAdv(this.checked)"><span class="ttr"></span></label>
-      <span style="font-size:11px;color:var(--txd)">Prof.</span>
+      <label class="toggle" title="Modo Orientador">
+        <input type="checkbox" id="adv-toggle" onchange="toggleAdv(this.checked)">
+        <span class="ttr"></span>
+      </label>
+      <span style="font-size:10px;color:var(--txd)">Prof.</span>
     </div>
   </header>
   <div class="content view" id="app-content">
-    <div style="display:flex;align-items:center;justify-content:center;height:50vh;gap:10px"><div class="spinner"></div><span style="color:var(--txd)">Carregando...</span></div>
+    <div style="display:flex;align-items:center;justify-content:center;height:50vh;gap:10px">
+      <div class="spinner"></div><span style="color:var(--txd)">Carregando...</span>
+    </div>
   </div>
 </div>
 </div>
@@ -238,17 +315,17 @@ input:checked+.ttr::before{transform:translateX(16px)}
   <div class="mb"><input type="hidden" id="af-id">
     <div class="fg">
       <div class="fr"><div><label>Autor(es) *</label><input id="af-au" placeholder="Ex: Bittencourt et al."></div><div><label>Ano</label><input type="number" id="af-yr" placeholder="2024"></div></div>
-      <div><label>Título *</label><input id="af-ti" placeholder="Título completo"></div>
+      <div><label>Título *</label><input id="af-ti" placeholder="Título completo do artigo"></div>
       <div class="fr"><div><label>DOI</label><input id="af-doi" placeholder="10.xxxx/xxxxx"></div><div><label>Periódico</label><input id="af-jn" placeholder="BJSM, Sports Med..."></div></div>
       <div class="fr">
         <div><label>Tipo</label><select id="af-ty"><option>Artigo</option><option>Revisão Sistemática</option><option>Meta-análise</option><option>Estudo Observacional</option><option>Ensaio Clínico</option><option>Conceitual</option></select></div>
-        <div><label>Eixo</label><select id="af-ax"><option>Sistemas Complexos</option><option>Machine Learning & IA</option><option>Carga de Treino</option><option>Fadiga & Biomarcadores</option><option>Ciclo Menstrual & RED-S</option><option>Epidemiologia de Lesões</option><option>Explicabilidade em IA</option><option>Wearables & Tecnologia</option><option>RTS & Reabilitação</option></select></div>
+        <div><label>Eixo Temático</label><select id="af-ax"><option>Sistemas Complexos</option><option>Machine Learning & IA</option><option>Carga de Treino</option><option>Fadiga & Biomarcadores</option><option>Ciclo Menstrual & RED-S</option><option>Epidemiologia de Lesões</option><option>Explicabilidade em IA</option><option>Wearables & Tecnologia</option><option>RTS & Reabilitação</option></select></div>
       </div>
       <div class="fr"><div><label>Fator de Impacto</label><input id="af-if" placeholder="IF 16.3 (BJSM)"></div><div><label>Status</label><select id="af-st"><option>Lido</option><option>Pendente</option><option>Em Andamento</option></select></div></div>
       <div><label>Objetivo</label><input id="af-ob" placeholder="Objetivo principal do estudo"></div>
-      <div><label>Metodologia</label><input id="af-me" placeholder="Tipo de estudo e métodos"></div>
+      <div><label>Metodologia</label><input id="af-me" placeholder="Tipo de estudo e métodos principais"></div>
       <div><label>Achados Principais</label><textarea id="af-fi" placeholder="Principais resultados e conclusões"></textarea></div>
-      <div><label>Relevância para o Mestrado</label><textarea id="af-re" placeholder="Por que este artigo é importante?"></textarea></div>
+      <div><label>Relevância para a Pesquisa</label><textarea id="af-re" placeholder="Por que este artigo é importante?"></textarea></div>
       <div><label>Notas Pessoais</label><textarea id="af-no" placeholder="Suas anotações..."></textarea></div>
     </div>
   </div>
@@ -260,7 +337,7 @@ input:checked+.ttr::before{transform:translateX(16px)}
   <div class="mb"><input type="hidden" id="tf-id">
     <div class="fg">
       <div><label>Título *</label><input id="tf-ti" placeholder="Ex: Submeter ao Comitê de Ética"></div>
-      <div class="fr"><div><label>Categoria</label><select id="tf-ca"><option>Publicação</option><option>Comitê de Ética</option><option>Evento</option><option>Administrativo</option><option>App Stamina</option><option>Ensino</option><option>Clínica</option><option>Outro</option></select></div><div><label>Prazo</label><input type="date" id="tf-du"></div></div>
+      <div class="fr"><div><label>Categoria</label><select id="tf-ca"><option>Publicação</option><option>Comitê de Ética</option><option>Evento</option><option>Administrativo</option><option>App / Tecnologia</option><option>Ensino</option><option>Clínica</option><option>Outro</option></select></div><div><label>Prazo</label><input type="date" id="tf-du"></div></div>
       <div class="fr"><div><label>Coluna</label><select id="tf-co"><option value="backlog">Backlog</option><option value="todo">A Fazer</option><option value="doing">Em Andamento</option><option value="done">Concluído</option></select></div><div><label>Prioridade</label><select id="tf-pr"><option>Normal</option><option>Alta</option><option>Urgente</option></select></div></div>
       <div><label>Descrição</label><textarea id="tf-de" placeholder="Detalhes, links, contexto..."></textarea></div>
     </div>
@@ -277,7 +354,7 @@ input:checked+.ttr::before{transform:translateX(16px)}
   <div class="mb"><input type="hidden" id="ef-id">
     <div class="fg">
       <div><label>Título *</label><input id="ef-ti" placeholder="Ex: Submissão BJSM — Artigo 1"></div>
-      <div class="fr"><div><label>Data *</label><input type="date" id="ef-da"></div><div><label>Tipo</label><select id="ef-ty"><option value="ev-sub">Submissão</option><option value="ev-pub">Publicação</option><option value="ev-dead">Prazo</option><option value="ev-conf">Congresso</option></select></div></div>
+      <div class="fr"><div><label>Data *</label><input type="date" id="ef-da"></div><div><label>Tipo</label><select id="ef-ty"><option value="ev-sub">Submissão</option><option value="ev-pub">Publicação / Aceite</option><option value="ev-dead">Prazo / Deadline</option><option value="ev-conf">Congresso / Evento</option></select></div></div>
       <div><label>Notas</label><textarea id="ef-no" placeholder="Informações adicionais..."></textarea></div>
     </div>
   </div>
@@ -316,16 +393,19 @@ input:checked+.ttr::before{transform:translateX(16px)}
 
 <div class="toast" id="toast"></div>
 <input type="file" id="doc-input" accept=".pdf,.docx,.md,.txt,.xlsx,.csv,.png,.jpg" multiple style="display:none" onchange="handleDocUpload(this)">
+<input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
 
 <script>
-const SUPA_URL='https://laoctlvvrqauafvexywj.supabase.co';
-const SUPA_KEY='sb_publishable_a5duTot3u4hQ_zD8u_EjrA_7hNIydDF';
+const SB_URL='https://laoctlvvrqauafvexywj.supabase.co';
+const SB_KEY='sb_publishable_a5duTot3u4hQ_zD8u_EjrA_7hNIydDF';
 const {createClient}=supabase;
-const db=createClient(SUPA_URL,SUPA_KEY);
+const db=createClient(SB_URL,SB_KEY);
+
 let CU=null,CV='dashboard',ADV=false,ARTS=[],DRAG=null;
 const $=id=>document.getElementById(id);
 const fmtDate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'—';
 const today=()=>new Date().toISOString().split('T')[0];
+
 function toast(m,t='ok'){const el=$('toast');el.textContent=m;el.className='toast show'+(t==='err'?' err':'');setTimeout(()=>el.classList.remove('show'),2800)}
 function openM(id){$(id).classList.add('open')}
 function closeM(id){$(id).classList.remove('open')}
@@ -337,8 +417,9 @@ function toggleAdv(on){ADV=on;render(CV)}
 function sBadge(s){const m={'Lido':'b-ok','Pendente':'b-wn','Em Andamento':'b-info'};return`<span class="badge ${m[s]||'b-def'}">${s}</span>`}
 function pBadge(p){const m={'Urgente':'b-dg','Alta':'b-wn','Normal':'b-def'};return`<span class="badge ${m[p]||'b-def'}">${p}</span>`}
 function evLabel(t){return{'ev-sub':'Submissão','ev-pub':'Publicação','ev-dead':'Prazo','ev-conf':'Congresso','eb':'Submissão','eg':'Publicação','ea':'Prazo','ep':'Congresso','t-sub':'Submissão','t-pub':'Publicação','t-dead':'Prazo','t-conf':'Congresso'}[t]||t}
+const LEVELS=['Graduação','Especialização / MBA','Mestrado','Doutorado','Pós-doutorado','Orientador / Professor','Pesquisador Independente'];
 
-// AUTH
+// ── AUTH ──
 function switchTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0)===(tab==='login')));
   $('auth-login').style.display=tab==='login'?'flex':'none';
@@ -352,67 +433,227 @@ async function doLogin(){
 }
 async function doRegister(){
   const name=$('r-name').value.trim(),email=$('r-email').value.trim(),pass=$('r-pass').value;
-  if(!name||!email||!pass){toast('Preencha todos os campos','err');return}
+  if(!name||!email||!pass){toast('Preencha os campos obrigatórios','err');return}
   if(pass.length<6){toast('Senha mínimo 6 caracteres','err');return}
   const{error}=await db.auth.signUp({email,password:pass,options:{data:{full_name:name,institution:$('r-inst').value.trim(),degree_level:$('r-level').value}}});
   if(error){toast('Erro: '+error.message,'err');return}
-  toast('Conta criada! Verifique seu email.')
+  toast('Conta criada! Faça login para continuar.')
+  switchTab('login');
 }
 async function doLogout(){
   await db.auth.signOut();CU=null;
-  $('app-screen').style.display='none';$('auth-screen').style.display='flex';
+  $('app-screen').style.display='none';
+  $('ob-screen').style.display='none';
+  $('auth-screen').style.display='flex';
 }
+
+// ── AUTH STATE ──
 db.auth.onAuthStateChange(async(event,session)=>{
   if(session?.user){
     CU=session.user;
-    $('auth-screen').style.display='none';$('app-screen').style.display='block';
-    const{data:p}=await db.from('profiles').select('*').eq('id',CU.id).single();
-    const nm=p?.full_name||CU.email.split('@')[0];
-    $('sb-nm').textContent=nm;$('sb-av').textContent=nm.charAt(0).toUpperCase();
+    $('auth-screen').style.display='none';
     setTheme(localStorage.getItem('theme')||'light');
     setFs(localStorage.getItem('fs')||'md');
-    go('dashboard');
+    const{data:p}=await db.from('profiles').select('*').eq('id',CU.id).single();
+    if(!p||!p.full_name){
+      startOnboarding();
+    } else {
+      launchApp(p);
+    }
   }
 });
 
-// NAV
-const TITLES={dashboard:'Dashboard',calendar:'Calendário',articles:'Fichamento de Artigos',files:'Documentos',kanban:'Kanban',certs:'Certificados & Horas',profile:'Meu Perfil',advisor:'Painel do Orientador'};
-function go(v){
-  CV=v;
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>{if(b.getAttribute('onclick')?.includes(`'${v}'`))b.classList.add('active')});
-  $('page-title').textContent=TITLES[v]||v;
-  closeSB();render(v);
-}
-function render(v){
-  const c=$('app-content');
-  c.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;padding:40px;gap:10px"><div class="spinner"></div></div>`;
-  c.className='content view';
-  const fn={dashboard:rDash,calendar:rCal,articles:rArts,files:rFiles,kanban:rKanban,certs:rCerts,profile:rProfile,advisor:rAdvisor};
-  if(fn[v])fn[v]();
+function launchApp(p){
+  $('ob-screen').style.display='none';
+  $('app-screen').style.display='block';
+  const nm=p?.full_name||CU.email.split('@')[0];
+  $('sb-nm').textContent=nm;
+  $('sb-level').textContent=p?.degree_level||'Plano Gratuito';
+  updateSbAvatar(p?.avatar_url, nm);
+  go('dashboard');
 }
 
-// DASHBOARD
+function updateSbAvatar(url, name){
+  const av=$('sb-av');
+  if(url){
+    av.innerHTML=`<img src="${url}" alt="avatar">`;
+  } else {
+    av.innerHTML=`<span>${(name||'?').charAt(0).toUpperCase()}</span>`;
+    av.style.background='var(--s3)';
+    av.style.display='flex';
+    av.style.alignItems='center';
+    av.style.justifyContent='center';
+    av.style.fontSize='13px';
+    av.style.fontWeight='600';
+  }
+}
+
+// ── ONBOARDING ──
+let OB_STEP=0;
+const OB_STEPS=[
+  {title:'Bem-vindo ao fichaAI! 👋',sub:'Vamos configurar sua conta em 3 passos rápidos. Você pode pular e fazer isso depois no seu perfil.',content:obStep1},
+  {title:'Sua identidade acadêmica',sub:'Adicione seus identificadores para conectar sua produção científica em um só lugar.',content:obStep2},
+  {title:'Seu primeiro artigo',sub:'Fichamento é o coração do fichaAI. Adicione um artigo para começar — pode ser qualquer um que esteja lendo agora.',content:obStep3},
+];
+
+function startOnboarding(){
+  OB_STEP=0;
+  $('app-screen').style.display='none';
+  $('ob-screen').style.display='flex';
+  renderOB();
+}
+
+function renderOB(){
+  const steps=OB_STEPS.length;
+  $('ob-steps').innerHTML=OB_STEPS.map((_,i)=>`<div class="ob-step${i<=OB_STEP?' done':''}"></div>`).join('');
+  const s=OB_STEPS[OB_STEP];
+  $('ob-content').innerHTML=`
+    <div class="ob-title">${s.title}</div>
+    <div class="ob-sub">${s.sub}</div>
+    <div id="ob-body">${s.content()}</div>
+    <div class="ob-nav">
+      <button class="btn btn-g btn-sm" onclick="skipOB()">Pular tudo</button>
+      <div style="display:flex;gap:8px">
+        ${OB_STEP>0?`<button class="btn btn-s btn-sm" onclick="prevOB()">← Voltar</button>`:''}
+        <button class="btn btn-p btn-sm" onclick="nextOB()">${OB_STEP===steps-1?'Começar →':'Próximo →'}</button>
+      </div>
+    </div>`;
+}
+
+function obStep1(){
+  return`<div class="fg">
+    <div class="fr">
+      <div><label>Nome completo *</label><input id="ob-name" placeholder="Dr. Pedro Santos" value="${CU.user_metadata?.full_name||''}"></div>
+      <div><label>Nível acadêmico</label><select id="ob-level">${LEVELS.map(l=>`<option${l==='Mestrado'?' selected':''}>${l}</option>`).join('')}</select></div>
+    </div>
+    <div class="fr">
+      <div><label>Instituição</label><input id="ob-inst" placeholder="UFMS, USP..." value="${CU.user_metadata?.institution||''}"></div>
+      <div><label>Área de pesquisa</label><input id="ob-area" placeholder="Fisiologia do Exercício, IA..."></div>
+    </div>
+    <div><label>Orientador (se houver)</label><input id="ob-adv" placeholder="Prof. Dr. Cássio Pinho dos Reis"></div>
+    <div style="display:flex;align-items:center;gap:16px;padding:14px;background:var(--s2);border-radius:var(--rs)">
+      <div class="avatar-upload" onclick="$('avatar-input').click()">
+        <div class="av-placeholder" id="ob-av-preview">${(CU.user_metadata?.full_name||'?').charAt(0).toUpperCase()}</div>
+        <div class="av-overlay">Alterar</div>
+      </div>
+      <div><div style="font-size:12.5px;font-weight:500;margin-bottom:3px">Foto de perfil</div><div style="font-size:11px;color:var(--txd)">Opcional. Clique para adicionar.</div></div>
+    </div>
+  </div>`;
+}
+
+function obStep2(){
+  const PLATS=['Lattes','ORCID','Google Scholar','ResearcherID','Sucupira'];
+  return`<div class="fg">${PLATS.map(p=>`<div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:12.5px;font-weight:500;width:130px;flex-shrink:0">${p}</span>
+    <input id="obp-${p.replace(/\s/g,'-')}" placeholder="Cole seu ID ou URL aqui">
+  </div>`).join('')}</div>`;
+}
+
+function obStep3(){
+  return`<div class="fg">
+    <div class="fr"><div><label>Autor(es) *</label><input id="ob-art-au" placeholder="Ex: Silva et al."></div><div><label>Ano</label><input type="number" id="ob-art-yr" placeholder="2024"></div></div>
+    <div><label>Título *</label><input id="ob-art-ti" placeholder="Título do artigo que está lendo agora"></div>
+    <div class="fr"><div><label>DOI</label><input id="ob-art-doi" placeholder="10.xxxx/xxxxx"></div><div><label>Status</label><select id="ob-art-st"><option>Lido</option><option>Em Andamento</option><option>Pendente</option></select></div></div>
+    <div><label>Achados principais</label><textarea id="ob-art-fi" placeholder="O que este artigo conclui?"></textarea></div>
+
+  </div>`;
+}
+
+let OB_AVATAR_URL=null;
+
+async function handleAvatarUpload(input){
+const file=input.files[0];if(!file)return;
+const reader=new FileReader();
+reader.onload=e=>{
+OB_AVATAR_URL=e.target.result;
+const prev=$(‘ob-av-preview’);
+if(prev)prev.innerHTML=`<img src="${OB_AVATAR_URL}" style="width:80px;height:80px;border-radius:50%;object-fit:cover">`;
+updateSbAvatar(OB_AVATAR_URL, $(‘ob-name’)?.value||’’);
+};
+reader.readAsDataURL(file);
+input.value=’’;
+}
+
+async function nextOB(){
+if(OB_STEP===0){
+const nm=$(‘ob-name’)?.value.trim();
+if(!nm){toast(‘Preencha seu nome’,‘err’);return}
+const payload={id:CU.id,full_name:nm,degree_level:$(‘ob-level’)?.value,institution:$(‘ob-inst’)?.value.trim(),research_area:$(‘ob-area’)?.value.trim(),advisor:$(‘ob-adv’)?.value.trim(),avatar_url:OB_AVATAR_URL||null,updated_at:new Date().toISOString()};
+await db.from(‘profiles’).upsert(payload);
+$(‘sb-nm’).textContent=nm;
+$(‘sb-level’).textContent=payload.degree_level;
+updateSbAvatar(payload.avatar_url,nm);
+}
+if(OB_STEP===1){
+const PLATS=[‘Lattes’,‘ORCID’,‘Google Scholar’,‘ResearcherID’,‘Sucupira’];
+for(const p of PLATS){
+const val=document.getElementById(‘obp-’+p.replace(/\s/g,’-’))?.value.trim();
+if(val)await db.from(‘academic_ids’).upsert({owner_id:CU.id,platform:p,platform_id:val},{onConflict:‘owner_id,platform’});
+}
+}
+if(OB_STEP===2){
+const au=$(‘ob-art-au’)?.value.trim(),ti=$(‘ob-art-ti’)?.value.trim();
+if(au&&ti){
+await db.from(‘articles’).insert({author:au,year:+$(‘ob-art-yr’)?.value||null,title:ti,doi:$(‘ob-art-doi’)?.value.trim(),status:$(‘ob-art-st’)?.value,findings:$(‘ob-art-fi’)?.value.trim(),owner_id:CU.id});
+}
+await finishOB();return;
+}
+OB_STEP++;renderOB();
+}
+
+function prevOB(){if(OB_STEP>0){OB_STEP–;renderOB()}}
+
+async function skipOB(){
+const nm=CU.user_metadata?.full_name||CU.email.split(’@’)[0];
+await db.from(‘profiles’).upsert({id:CU.id,full_name:nm,updated_at:new Date().toISOString()});
+finishOB();
+}
+
+async function finishOB(){
+const{data:p}=await db.from(‘profiles’).select(’*’).eq(‘id’,CU.id).single();
+toast(‘Conta configurada! Bem-vindo ao fichaAI 🎉’);
+launchApp(p||{full_name:CU.email});
+}
+
+// ── NAV ──
+const TITLES={dashboard:‘Dashboard’,calendar:‘Calendário’,articles:‘Fichamento de Artigos’,files:‘Documentos’,kanban:‘Kanban’,certs:‘Certificados & Horas’,profile:‘Meu Perfil’,advisor:‘Painel do Orientador’};
+function go(v){
+CV=v;
+document.querySelectorAll(’.nb’).forEach(b=>b.classList.remove(‘active’));
+document.querySelectorAll(’.nb’).forEach(b=>{if(b.getAttribute(‘onclick’)?.includes(`'${v}'`))b.classList.add(‘active’)});
+$(‘page-title’).textContent=TITLES[v]||v;
+closeSB();render(v);
+}
+function render(v){
+const c=$(‘app-content’);
+c.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;padding:40px;gap:10px"><div class="spinner"></div></div>`;
+c.className=‘content view’;
+const fn={dashboard:rDash,calendar:rCal,articles:rArts,files:rFiles,kanban:rKanban,certs:rCerts,profile:rProfile,advisor:rAdvisor};
+if(fn[v])fn[v]();
+}
+
+// ── DASHBOARD ──
 async function rDash(){
-  const[ar,tk,ev,ce,or]=await Promise.all([
-    db.from('articles').select('*').eq('owner_id',CU.id),
-    db.from('tasks').select('*').eq('owner_id',CU.id),
-    db.from('events').select('*').eq('owner_id',CU.id),
-    db.from('certificates').select('*').eq('owner_id',CU.id),
-    db.from('orientacoes').select('*').order('created_at',{ascending:false}).limit(5)
-  ]);
-  const a=ar.data||[],t=tk.data||[],e=ev.data||[],c=ce.data||[],o=or.data||[];
-  const lido=a.filter(x=>x.status==='Lido').length;
-  const done=t.filter(x=>x.column_id==='done').length;
-  const hrs=c.reduce((s,x)=>s+(+x.hours||0),0);
-  const up=e.filter(x=>x.event_date>=today()).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,5);
-  const urg=t.filter(x=>x.column_id!=='done'&&(x.priority==='Urgente'||x.priority==='Alta')).slice(0,5);
-  $('art-badge').textContent=a.length;
-  $('app-content').innerHTML=`
+const[ar,tk,ev,ce,or]=await Promise.all([
+db.from(‘articles’).select(’*’).eq(‘owner_id’,CU.id),
+db.from(‘tasks’).select(’*’).eq(‘owner_id’,CU.id),
+db.from(‘events’).select(’*’).eq(‘owner_id’,CU.id),
+db.from(‘certificates’).select(’*’).eq(‘owner_id’,CU.id),
+db.from(‘orientacoes’).select(’*’).order(‘created_at’,{ascending:false}).limit(5)
+]);
+const a=ar.data||[],t=tk.data||[],e=ev.data||[],c=ce.data||[],o=or.data||[];
+const lido=a.filter(x=>x.status===‘Lido’).length;
+const done=t.filter(x=>x.column_id===‘done’).length;
+const hrs=c.reduce((s,x)=>s+(+x.hours||0),0);
+const up=e.filter(x=>x.event_date>=today()).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,5);
+const urg=t.filter(x=>x.column_id!==‘done’&&(x.priority===‘Urgente’||x.priority===‘Alta’)).slice(0,5);
+$(‘art-badge’).textContent=a.length;
+$(‘app-content’).innerHTML=`
+
   <div class="sg">
-    <div class="sc"><div class="sv">${a.length}</div><div class="sl">Artigos fichados</div><div class="ss">${lido} lidos</div></div>
+    <div class="sc"><div class="sv">${a.length}</div><div class="sl">Artigos fichados</div><div class="ss">${lido} lidos · ${a.filter(x=>x.status==='Pendente').length} pendentes</div></div>
     <div class="sc"><div class="sv">${done}/${t.length}</div><div class="sl">Tarefas concluídas</div><div class="ss">${t.filter(x=>x.column_id==='doing').length} em andamento</div></div>
-    <div class="sc"><div class="sv">${up.length}</div><div class="sl">Próximos eventos</div></div>
+    <div class="sc"><div class="sv">${up.length}</div><div class="sl">Próximos eventos</div><div class="ss">nos próximos meses</div></div>
     <div class="sc"><div class="sv">${hrs}h</div><div class="sl">Horas complementares</div><div class="ss">${c.length} certificados</div></div>
   </div>
   <div class="g2" style="margin-bottom:16px">
@@ -422,20 +663,20 @@ async function rDash(){
         <span class="badge b-info" style="font-size:9.5px;flex-shrink:0">${evLabel(ev.type)}</span>
         <span style="flex:1;font-size:12px">${ev.title}</span>
         <span style="font-size:11px;color:var(--txd);white-space:nowrap">${fmtDate(ev.event_date)}</span>
-      </div>`).join(''):`<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhum evento próximo</div>`}
+      </div>`).join(''):`<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhum evento próximo. <button class="btn btn-s btn-xs" onclick="go('calendar')">Adicionar</button></div>`}
     </div>
     <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
       <div class="stitle">Prioridades</div>
       ${urg.length?urg.map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)">
         ${pBadge(x.priority)}<span style="flex:1;font-size:12px">${x.title}</span>
         <span style="font-size:11px;color:var(--txd)">${x.due_date?fmtDate(x.due_date):''}</span>
-      </div>`).join(''):`<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhuma tarefa urgente</div>`}
+      </div>`).join(''):`<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhuma tarefa urgente. <button class="btn btn-s btn-xs" onclick="go('kanban')">Ver kanban</button></div>`}
     </div>
   </div>
   <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:16px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div class="stitle" style="margin:0">Orientações do Prof. Cássio</div>
-      ${ADV?`<button class="btn btn-p btn-sm" onclick="openM('m-orient')">+ Nova Orientação</button>`:''}
+      <div class="stitle" style="margin:0">Orientações</div>
+      ${ADV?`<button class="btn btn-p btn-sm" onclick="openM('m-orient')">+ Nova</button>`:''}
     </div>
     ${o.length?o.map(or=>`<div class="oc oc-${(or.tipo||'').toLowerCase()}">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -450,42 +691,46 @@ async function rDash(){
   </div>
   <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
     <div class="stitle">Artigos por Eixo Temático</div>
-    ${Object.entries(a.reduce((m,x)=>{m[x.axis]=(m[x.axis]||0)+1;return m},{})).sort((a,b)=>b[1]-a[1]).map(([ax,ct])=>`
+    ${Object.entries(a.reduce((m,x)=>{m[x.axis||'Sem eixo']=(m[x.axis||'Sem eixo']||0)+1;return m},{})).sort((a,b)=>b[1]-a[1]).map(([ax,ct])=>`
     <div style="margin-bottom:8px">
       <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-        <span style="font-size:12px">${ax}</span><span style="font-size:11px;color:var(--txd)">${ct}</span>
+        <span style="font-size:12px">${ax}</span><span style="font-size:11px;color:var(--txd)">${ct} artigo${ct>1?'s':''}</span>
       </div>
       <div class="progress"><div class="pf" style="width:${(ct/Math.max(a.length,1)*100).toFixed(0)}%"></div></div>
-    </div>`).join('')||`<div style="color:var(--txd);font-size:12px">Nenhum artigo fichado ainda</div>`}
+    </div>`).join('')||`<div style="color:var(--txd);font-size:12px">Nenhum artigo fichado. <button class="btn btn-s btn-xs" onclick="go('articles')">Adicionar primeiro artigo</button></div>`}
   </div>`;
 }
-async function saveOrient(){
-  const tx=$('or-tx').value.trim(),ty=$('or-ty').value,se=$('or-se').value;
-  if(!tx){toast('Digite a orientação','err');return}
-  const{error}=await db.from('orientacoes').insert({texto:tx,tipo:ty,target_section:se||null,advisor_id:CU.id});
-  if(error){toast('Erro ao salvar','err');return}
-  toast('Orientação enviada!');closeM('m-orient');rDash();
-}
-async function delOrient(id){if(!confirm('Excluir?'))return;await db.from('orientacoes').delete().eq('id',id);toast('Excluída');rDash()}
-async function resolveOrient(id){await db.from('orientacoes').update({resolved:true,resolved_at:new Date().toISOString()}).eq('id',id);toast('Marcada como lida');rDash()}
 
-// ARTICLES
+async function saveOrient(){
+const tx=$(‘or-tx’).value.trim(),ty=$(‘or-ty’).value,se=$(‘or-se’).value;
+if(!tx){toast(‘Digite a orientação’,‘err’);return}
+const{error}=await db.from(‘orientacoes’).insert({texto:tx,tipo:ty,target_section:se||null,advisor_id:CU.id});
+if(error){toast(‘Erro ao salvar’,‘err’);return}
+toast(‘Orientação enviada!’);closeM(‘m-orient’);rDash();
+}
+async function delOrient(id){if(!confirm(‘Excluir?’))return;await db.from(‘orientacoes’).delete().eq(‘id’,id);toast(‘Excluída’);rDash()}
+async function resolveOrient(id){await db.from(‘orientacoes’).update({resolved:true}).eq(‘id’,id);toast(‘Marcada como lida’);rDash()}
+
+// ── ARTICLES ──
 async function rArts(){
-  const{data}=await db.from('articles').select('*').eq('owner_id',CU.id).order('id');
-  ARTS=data||[];$('art-badge').textContent=ARTS.length;
-  const axes=[...new Set(ARTS.map(a=>a.axis))].sort();
-  $('app-content').innerHTML=`
-  <div class="fb"><div></div><div style="display:flex;gap:8px">
-    ${!ADV?`<button class="btn btn-s btn-sm" onclick="expCSV()">Exportar CSV</button><button class="btn btn-p btn-sm" onclick="openAddArt()">+ Adicionar</button>`:''}
-  </div></div>
+const{data}=await db.from(‘articles’).select(’*’).eq(‘owner_id’,CU.id).order(‘id’);
+ARTS=data||[];$(‘art-badge’).textContent=ARTS.length;
+const axes=[…new Set(ARTS.map(a=>a.axis).filter(Boolean))].sort();
+$(‘app-content’).innerHTML=`
+
+  <div class="fb"><div style="font-size:12px;color:var(--txm)">${ARTS.length} artigos fichados</div>
+    <div style="display:flex;gap:8px">
+      ${!ADV?`<button class="btn btn-s btn-sm" onclick="expCSV()">↓ CSV</button><button class="btn btn-p btn-sm" onclick="openAddArt()">+ Adicionar</button>`:''}
+    </div>
+  </div>
   <div class="filters">
     <div class="srch"><span class="si">⌕</span><input id="as-q" placeholder="Buscar autor, título, achados..." oninput="filterArts()"></div>
     <select id="as-ax" onchange="filterArts()"><option value="">Todos os eixos</option>${axes.map(a=>`<option>${a}</option>`).join('')}</select>
     <select id="as-st" onchange="filterArts()"><option value="">Todos os status</option><option>Lido</option><option>Pendente</option><option>Em Andamento</option></select>
   </div>
-  <div id="as-lbl" style="font-size:11px;color:var(--txd);margin-bottom:8px">Mostrando ${ARTS.length} artigos</div>
+  <div id="as-lbl" style="font-size:11px;color:var(--txd);margin-bottom:8px"></div>
   <div class="tw"><table>
-    <thead><tr><th>#</th><th>Autor</th><th>Título</th><th>Eixo</th><th>Impacto</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>#</th><th>Autor</th><th>Título</th><th>Eixo</th><th>IF</th><th>Status</th><th></th></tr></thead>
     <tbody id="as-tb"></tbody>
   </table></div>`;
   filterArts();
@@ -494,17 +739,17 @@ function filterArts(){
   const s=($('as-q')||{}).value?.toLowerCase()||'';
   const ax=($('as-ax')||{}).value||'';
   const st=($('as-st')||{}).value||'';
-  const f=ARTS.filter(a=>(!s||a.title?.toLowerCase().includes(s)||a.author?.toLowerCase().includes(s)||a.findings?.toLowerCase().includes(s))&&(!ax||a.axis===ax)&&(!st||a.status===st));
+  const f=ARTS.filter(a=>(!s||a.title?.toLowerCase().includes(s)||a.author?.toLowerCase().includes(s)||a.findings?.toLowerCase().includes(s)||a.relevance?.toLowerCase().includes(s))&&(!ax||a.axis===ax)&&(!st||a.status===st));
   if($('as-lbl'))$('as-lbl').textContent=`Mostrando ${f.length} de ${ARTS.length} artigos`;
   if($('as-tb'))$('as-tb').innerHTML=f.map(a=>`<tr>
-    <td style="color:var(--txd);font-size:11px">${a.id}</td>
-    <td style="font-size:12px;white-space:nowrap">${a.author}</td>
+    <td style="color:var(--txd);font-size:11px;white-space:nowrap">${a.id}</td>
+    <td style="font-size:12px;white-space:nowrap">${a.author||'—'}</td>
     <td><span class="tdt" title="${a.title}">${a.title}</span></td>
     <td><span class="badge b-def" style="font-size:9.5px">${a.axis||'—'}</span></td>
     <td style="font-size:11px;color:var(--txm);white-space:nowrap">${a.impact_factor||'—'}</td>
     <td>${sBadge(a.status)}</td>
     <td><button class="btn btn-s btn-sm" onclick="viewArt(${a.id})">Ver</button></td>
-  </tr>`).join('')||`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txd)">Nenhum artigo encontrado</td></tr>`;
+  </tr>`).join('')||`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--txd)">Nenhum artigo encontrado</td></tr>`;
 }
 function viewArt(id){
   const a=ARTS.find(x=>x.id===id);if(!a)return;
@@ -516,13 +761,13 @@ function viewArt(id){
     ${a.impact_factor?`<span class="badge b-info">${a.impact_factor}</span>`:''}
   </div>
   ${a.doi?`<div style="margin-bottom:12px"><span style="font-size:11px;color:var(--txd)">DOI: </span><a href="https://doi.org/${a.doi}" target="_blank" style="font-size:12px;color:var(--in)">${a.doi}</a></div>`:''}
-  <div style="display:grid;gap:10px">
-    ${a.author?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Autor</div><div style="font-size:13px">${a.author}</div></div>`:''}
+  <div style="display:grid;gap:12px">
+    ${a.author?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Autor</div><div style="font-size:13px">${a.author}${a.year?' ('+a.year+')':''}</div></div>`:''}
     ${a.objective?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Objetivo</div><div style="font-size:13px;line-height:1.6">${a.objective}</div></div>`:''}
     ${a.methodology?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Metodologia</div><div style="font-size:13px;line-height:1.6">${a.methodology}</div></div>`:''}
     ${a.findings?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Achados Principais</div><div style="font-size:13px;line-height:1.6">${a.findings}</div></div>`:''}
-    ${a.relevance?`<div style="background:var(--wnl);border-radius:var(--rs);padding:10px"><div style="font-size:10px;font-weight:600;color:var(--wn);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Relevância</div><div style="font-size:13px;line-height:1.6">${a.relevance}</div></div>`:''}
-    ${a.notes?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Notas</div><div style="font-size:13px;line-height:1.6">${a.notes}</div></div>`:''}
+    ${a.relevance?`<div style="background:var(--wnl);border-radius:var(--rs);padding:10px 12px"><div style="font-size:10px;font-weight:600;color:var(--wn);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Relevância</div><div style="font-size:13px;line-height:1.6">${a.relevance}</div></div>`:''}
+    ${a.notes?`<div><div style="font-size:10px;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Notas Pessoais</div><div style="font-size:13px;line-height:1.6">${a.notes}</div></div>`:''}
   </div>
   ${!ADV?`<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
     <button class="btn btn-d btn-sm" onclick="delArt(${a.id})">Excluir</button>
@@ -559,12 +804,13 @@ function expCSV(){
   const u=URL.createObjectURL(blob);const el=document.createElement('a');el.href=u;el.download='fichamento.csv';el.click();
 }
 
-// KANBAN
-const COLS=[{id:'backlog',label:'Backlog',color:'#9e9e9e'},{id:'todo',label:'A Fazer',color:'#e65100'},{id:'doing',label:'Em Andamento',color:'#1565c0'},{id:'done',label:'Concluído',color:'#2e7d32'}];
+// ── KANBAN ──
+const COLS=[{id:‘backlog’,label:‘Backlog’,color:’#9e9e9e’},{id:‘todo’,label:‘A Fazer’,color:’#e65100’},{id:‘doing’,label:‘Em Andamento’,color:’#1565c0’},{id:‘done’,label:‘Concluído’,color:’#2e7d32’}];
 async function rKanban(){
-  const{data}=await db.from('tasks').select('*').eq('owner_id',CU.id).order('position');
-  const tasks=data||[];
-  $('app-content').innerHTML=`
+const{data}=await db.from(‘tasks’).select(’*’).eq(‘owner_id’,CU.id).order(‘position’);
+const tasks=data||[];
+$(‘app-content’).innerHTML=`
+
   <div class="fb"><div></div>${!ADV?`<button class="btn btn-p btn-sm" onclick="openAddTask()">+ Nova Atividade</button>`:''}</div>
   <div class="kanban">
     ${COLS.map(col=>{const cards=tasks.filter(t=>t.column_id===col.id);return`<div class="kc">
@@ -572,7 +818,7 @@ async function rKanban(){
       <div class="kcards drop-zone" id="col-${col.id}" ondragover="onDragOver(event,'${col.id}')" ondrop="onDrop(event,'${col.id}')" ondragleave="e=>e.currentTarget.classList.remove('da')">
         ${cards.map(t=>`<div class="kcard" id="tk-${t.id}" draggable="true" ondragstart="onDragStart(event,${t.id})" ondragend="onDragEnd(event)">
           <div class="kcard-t">${t.title}</div>
-          <div class="kcard-m"><span class="badge b-def">${t.category||'Outro'}</span>${t.priority!=='Normal'?pBadge(t.priority):''}${t.due_date?`<span style="font-size:10px;color:var(--txd)">📅 ${fmtDate(t.due_date)}</span>`:''}</div>
+          <div class="kcard-m"><span class="badge b-def" style="font-size:9.5px">${t.category||'Outro'}</span>${t.priority!=='Normal'?pBadge(t.priority):''}${t.due_date?`<span style="font-size:10px;color:var(--txd)">📅 ${fmtDate(t.due_date)}</span>`:''}</div>
           ${!ADV?`<div class="kcard-a"><button class="btn btn-s btn-xs" onclick="editTask(${t.id})">Editar</button><button class="btn btn-d btn-xs" onclick="confirmDelTask(${t.id})">Excluir</button></div>`:''}
         </div>`).join('')}
       </div>
@@ -582,7 +828,7 @@ async function rKanban(){
 }
 function onDragStart(e,id){DRAG=id;e.target.classList.add('dragging');e.dataTransfer.effectAllowed='move'}
 function onDragEnd(e){e.target.classList.remove('dragging');document.querySelectorAll('.drop-zone').forEach(z=>z.classList.remove('da'))}
-function onDragOver(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';$('col-'+col).classList.add('da')}
+function onDragOver(e,col){e.preventDefault();$('col-'+col).classList.add('da')}
 async function onDrop(e,col){
   e.preventDefault();$('col-'+col).classList.remove('da');
   if(!DRAG)return;
@@ -612,23 +858,24 @@ async function saveTask(){
 async function deleteTask(){const id=$('tf-id').value;if(!id||!confirm('Excluir?'))return;await db.from('tasks').delete().eq('id',id);toast('Excluído');closeM('m-task');rKanban()}
 async function confirmDelTask(id){if(!confirm('Excluir esta atividade?'))return;await db.from('tasks').delete().eq('id',id);toast('Excluído');rKanban()}
 
-// CALENDAR
+// ── CALENDAR ──
 let CY=new Date().getFullYear(),CM=new Date().getMonth();
-async function rCal(){const{data}=await db.from('events').select('*').eq('owner_id',CU.id);rCalUI(data||[])}
+async function rCal(){const{data}=await db.from(‘events’).select(’*’).eq(‘owner_id’,CU.id);rCalUI(data||[])}
 function rCalUI(evs){
-  const MN=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const DN=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const last=new Date(CY,CM+1,0).getDate(),sdow=new Date(CY,CM,1).getDay(),td=today();
-  const em={};evs.forEach(ev=>{if(!em[ev.event_date])em[ev.event_date]=[];em[ev.event_date].push(ev)});
-  let days='';
-  for(let i=0;i<sdow;i++)days+=`<div class="cd om"></div>`;
-  for(let d=1;d<=last;d++){
-    const ds=`${CY}-${String(CM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const de=em[ds]||[];
-    days+=`<div class="cd${ds===td?' td':''}"><div class="cd-n">${d}</div>${de.slice(0,3).map(ev=>`<div class="cev ${ev.type}" title="${ev.title}">${ev.title}</div>`).join('')}${de.length>3?`<div style="font-size:9px;color:var(--txd)">+${de.length-3}</div>`:''}</div>`;
-  }
-  const up=evs.filter(e=>e.event_date>=td).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,10);
-  $('app-content').innerHTML=`
+const MN=[‘Janeiro’,‘Fevereiro’,‘Março’,‘Abril’,‘Maio’,‘Junho’,‘Julho’,‘Agosto’,‘Setembro’,‘Outubro’,‘Novembro’,‘Dezembro’];
+const DN=[‘Dom’,‘Seg’,‘Ter’,‘Qua’,‘Qui’,‘Sex’,‘Sáb’];
+const last=new Date(CY,CM+1,0).getDate(),sdow=new Date(CY,CM,1).getDay(),td=today();
+const em={};evs.forEach(ev=>{if(!em[ev.event_date])em[ev.event_date]=[];em[ev.event_date].push(ev)});
+let days=’’;
+for(let i=0;i<sdow;i++)days+=`<div class="cd om"></div>`;
+for(let d=1;d<=last;d++){
+const ds=`${CY}-${String(CM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+const de=em[ds]||[];
+days+=`<div class="cd${ds===td?' td':''}"><div class="cd-n">${d}</div>${de.slice(0,3).map(ev=>`<div class="cev ${ev.type}" title="${ev.title}">${ev.title}</div>`).join('')}${de.length>3?`<div style="font-size:9px;color:var(--txd)">+${de.length-3}</div>`:''}</div>`;
+}
+const up=evs.filter(e=>e.event_date>=td).sort((a,b)=>a.event_date.localeCompare(b.event_date)).slice(0,10);
+$(‘app-content’).innerHTML=`
+
   <div class="fb"><div></div>${!ADV?`<button class="btn btn-p btn-sm" onclick="openM('m-event')">+ Novo Evento</button>`:''}</div>
   <div class="cal-nav">
     <div style="display:flex;gap:6px;align-items:center">
@@ -645,8 +892,7 @@ function rCalUI(evs){
       <tbody>${up.map(ev=>`<tr>
         <td style="white-space:nowrap">${fmtDate(ev.event_date)}</td>
         <td><span class="badge b-info" style="font-size:9.5px">${evLabel(ev.type)}</span></td>
-        <td>${ev.title}</td>
-        <td style="font-size:11px;color:var(--txm)">${ev.notes||''}</td>
+        <td>${ev.title}</td><td style="font-size:11px;color:var(--txm)">${ev.notes||''}</td>
         ${!ADV?`<td><button class="btn btn-d btn-xs" onclick="delEvent(${ev.id})">Excluir</button></td>`:''}
       </tr>`).join('')||`<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--txd)">Nenhum evento próximo</td></tr>`}
       </tbody>
@@ -665,12 +911,13 @@ async function saveEvent(){
 }
 async function delEvent(id){if(!confirm('Excluir evento?'))return;await db.from('events').delete().eq('id',id);toast('Excluído');rCal()}
 
-// CERTS
+// ── CERTS ──
 async function rCerts(){
-  const{data}=await db.from('certificates').select('*').eq('owner_id',CU.id).order('created_at',{ascending:false});
-  const c=data||[],h=c.reduce((s,x)=>s+(+x.hours||0),0);
-  $('app-content').innerHTML=`
-  <div class="fb"><div style="font-size:12px;color:var(--txm)">Total: <strong>${h}h</strong> em ${c.length} certificados</div>
+const{data}=await db.from(‘certificates’).select(’*’).eq(‘owner_id’,CU.id).order(‘created_at’,{ascending:false});
+const c=data||[],h=c.reduce((s,x)=>s+(+x.hours||0),0);
+$(‘app-content’).innerHTML=`
+
+  <div class="fb"><div style="font-size:12px;color:var(--txm)">Total: <strong>${h}h</strong> · ${c.length} certificados</div>
     ${!ADV?`<button class="btn btn-p btn-sm" onclick="openAddCert()">+ Adicionar</button>`:''}</div>
   <div class="tw gap"><table>
     <thead><tr><th>Evento</th><th>Data</th><th>Tipo</th><th>Horas</th><th>Observações</th>${!ADV?'<th></th>':''}</tr></thead>
@@ -681,7 +928,7 @@ async function rCerts(){
       <td><strong>${x.hours||0}h</strong></td>
       <td style="font-size:11px;color:var(--txm)">${x.notes||''}</td>
       ${!ADV?`<td style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-s btn-xs" onclick="editCert(${x.id})">Editar</button><button class="btn btn-d btn-xs" onclick="delCert(${x.id})">Excluir</button></td>`:''}
-    </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txd)">Nenhum certificado cadastrado</td></tr>`}
+    </tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--txd)">Nenhum certificado cadastrado</td></tr>`}
     </tbody>
   </table></div>`;
 }
@@ -702,40 +949,40 @@ async function saveCert(){
 }
 async function delCert(id){if(!confirm('Excluir?'))return;await db.from('certificates').delete().eq('id',id);toast('Excluído');rCerts()}
 
-// FILES
+// ── FILES ──
 const SDOCS=[
-  {key:'pre-projeto',title:'Pré-Projeto de Mestrado',desc:'Documento oficial com 6 hipóteses',cat:'Mestrado',icon:'◻',editable:true},
-  {key:'estrategia',title:'Estratégia Final Integrada 2026-2027',desc:'12 artigos, 30 eventos, cronograma',cat:'Estratégia',icon:'◻',editable:false},
-  {key:'fichamento',title:'Fichamento de Artigos Completo',desc:'55 artigos fichados',cat:'Pesquisa',icon:'◻',editable:false},
-  {key:'cronograma',title:'Cronograma Integrado 2026-2027',desc:'Timeline com datas de submissão',cat:'Planejamento',icon:'◻',editable:false},
-  {key:'eventos',title:'Mapeamento de Eventos 2026-2027',desc:'Revistas e eventos internacionais',cat:'Pesquisa',icon:'◻',editable:false},
-  {key:'datametrics',title:'Documentação DataMetrics v4.3',desc:'Documentação técnica do sistema',cat:'Técnico',icon:'◻',editable:false},
-  {key:'stamina',title:'Guia API Stamina v4.3',desc:'Guia técnico de implementação',cat:'Técnico',icon:'◻',editable:false},
-  {key:'acessos',title:'Acessos Gratuitos UFMS',desc:'Ferramentas e bases de dados',cat:'Recursos',icon:'◻',editable:false},
+{key:‘pre-projeto’,title:‘Pré-Projeto de Mestrado’,desc:‘Documento oficial com 6 hipóteses’,cat:‘Mestrado’,editable:true},
+{key:‘estrategia’,title:‘Estratégia Final Integrada 2026-2027’,desc:‘12 artigos, 30 eventos, cronograma’,cat:‘Estratégia’,editable:false},
+{key:‘fichamento’,title:‘Fichamento de Artigos Completo’,desc:‘55 artigos fichados’,cat:‘Pesquisa’,editable:false},
+{key:‘cronograma’,title:‘Cronograma Integrado 2026-2027’,desc:‘Timeline com datas de submissão’,cat:‘Planejamento’,editable:false},
+{key:‘eventos’,title:‘Mapeamento de Eventos 2026-2027’,desc:‘Revistas e eventos internacionais’,cat:‘Pesquisa’,editable:false},
+{key:‘datametrics’,title:‘Documentação DataMetrics v4.3’,desc:‘Documentação técnica do sistema’,cat:‘Técnico’,editable:false},
+{key:‘stamina’,title:‘Guia API Stamina v4.3’,desc:‘Guia técnico de implementação’,cat:‘Técnico’,editable:false},
+{key:‘acessos’,title:‘Acessos Gratuitos UFMS’,desc:‘Ferramentas e bases de dados’,cat:‘Recursos’,editable:false},
 ];
 async function rFiles(){
-  const{data}=await db.from('documents').select('*').eq('owner_id',CU.id).order('created_at',{ascending:false});
-  const docs=data||[];
-  $('app-content').innerHTML=`
+const{data}=await db.from(‘documents’).select(’*’).eq(‘owner_id’,CU.id).order(‘created_at’,{ascending:false});
+const docs=data||[];
+$(‘app-content’).innerHTML=`
+
   <div class="stitle">Documentos Estratégicos</div>
   <div class="doc-grid" style="margin-bottom:20px">
     ${SDOCS.map(d=>`<div class="doc-card" onclick="viewDoc('${d.key}')">
-      <div style="font-size:11px;color:var(--txd);margin-bottom:6px">${d.cat.toUpperCase()}${d.editable?' · EDITÁVEL':''}</div>
+      <div style="font-size:10px;color:var(--txd);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">${d.cat}${d.editable?' · EDITÁVEL':''}</div>
       <div style="font-size:13px;font-weight:500;margin-bottom:4px;line-height:1.4">${d.title}</div>
       <div style="font-size:11px;color:var(--txd);line-height:1.4">${d.desc}</div>
-      <div style="margin-top:10px;font-size:11px;color:var(--txm)">Clique para abrir →</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--txm)">Abrir →</div>
     </div>`).join('')}
   </div>
   <div class="fb">
-    <div class="stitle" style="margin:0">Uploads (${docs.length})</div>
+    <div class="stitle" style="margin:0">Meus Uploads (${docs.length})</div>
     ${!ADV?`<button class="btn btn-p btn-sm" onclick="$('doc-input').click()">+ Upload</button>`:''}
   </div>
   <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
     ${docs.map(d=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--rs)">
-      <span style="font-size:18px">◻</span>
       <div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.title||d.file_name}</div><div style="font-size:10.5px;color:var(--txd)">${d.category||'Upload'} · ${fmtDate(d.created_at)}</div></div>
       ${!ADV?`<button class="btn btn-d btn-xs" onclick="delDoc(${d.id})">Excluir</button>`:''}
-    </div>`).join('')||`<div class="empty" style="border:1px solid var(--bd);border-radius:var(--r)"><div style="font-size:11px">Nenhum arquivo enviado ainda</div></div>`}
+    </div>`).join('')||`<div style="padding:24px;border:1px dashed var(--bd);border-radius:var(--r);text-align:center;color:var(--txd);font-size:12px">Nenhum arquivo enviado ainda</div>`}
   </div>`;
 }
 function viewDoc(key){
@@ -744,11 +991,9 @@ function viewDoc(key){
   $('m-doc-b').innerHTML=`
   <div style="margin-bottom:12px"><span class="badge b-def">${d.cat}</span>${d.editable?`<span class="badge b-info" style="margin-left:4px">Editável</span>`:''}</div>
   <p style="font-size:12.5px;color:var(--txm);margin-bottom:14px">${d.desc}</p>
-  ${d.editable?`<div><label>Anotações e Observações (salvas automaticamente)</label>
-    <textarea id="doc-edit" style="min-height:200px;font-size:12.5px" placeholder="Adicione suas observações, marcações e comentários aqui...">${localStorage.getItem('doc-'+key)||''}</textarea>
-
-  </div>`:
-  `<div style="background:var(--s2);border-radius:var(--rs);padding:16px;font-size:12.5px;color:var(--txm);line-height:1.7">Este documento está disponível no repositório do projeto.<br>Para visualizar o conteúdo completo, acesse os arquivos no GitHub ou solicite ao orientador.</div>`}`;
+  ${d.editable?`<div><label>Anotações e Observações (salvas no navegador)</label>
+    <textarea id="doc-edit" style="min-height:200px;font-size:12.5px" placeholder="Adicione suas observações aqui...">${localStorage.getItem('doc-'+key)||''}</textarea></div>`:
+  `<div style="background:var(--s2);border-radius:var(--rs);padding:16px;font-size:12.5px;color:var(--txm);line-height:1.7">Documento disponível no repositório do projeto.<br>Para acessar o conteúdo completo, consulte os arquivos no GitHub.</div>`}`;
   $('m-doc-f').innerHTML=`${d.editable?`<button class="btn btn-p btn-sm" onclick="saveDocEdit('${key}')">Salvar Observações</button>`:''}
   <button class="btn btn-s btn-sm" onclick="closeM('m-doc')">Fechar</button>`;
   openM('m-doc');
@@ -763,51 +1008,74 @@ async function handleDocUpload(input){
 }
 async function delDoc(id){if(!confirm('Excluir?'))return;await db.from('documents').delete().eq('id',id);toast('Excluído');rFiles()}
 
-// PROFILE
+// ── PROFILE ──
 async function rProfile(){
 const{data:p}=await db.from(‘profiles’).select(’*’).eq(‘id’,CU.id).single();
 const prof=p||{};
 const{data:aids}=await db.from(‘academic_ids’).select(’*’).eq(‘owner_id’,CU.id);
 const ids=aids||[];
-const PLATS=[‘Lattes’,‘ORCID’,‘ResearcherID’,‘Google Scholar’,‘Sucupira’,‘CNPq’,‘Plataforma Brasil’,‘Gov.br’];
+const PLATS=[‘Lattes’,‘ORCID’,‘Google Scholar’,‘ResearcherID’,‘Sucupira’,‘CNPq’,‘Plataforma Brasil’,‘Gov.br’];
 $(‘app-content’).innerHTML=`
 
   <div class="g2">
     <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
       <div class="stitle">Dados Pessoais</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:12px;background:var(--s2);border-radius:var(--rs)">
+        <div class="avatar-upload" onclick="$('avatar-input').click()" title="Clique para alterar foto">
+          ${prof.avatar_url?`<img src="${prof.avatar_url}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--bd)">`:`<div class="av-placeholder">${(prof.full_name||CU.email||'?').charAt(0).toUpperCase()}</div>`}
+          <div class="av-overlay">Alterar foto</div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:500">${prof.full_name||'—'}</div>
+          <div style="font-size:11px;color:var(--txm);margin-top:2px">${prof.degree_level||''}</div>
+          <div style="font-size:11px;color:var(--txd)">${prof.institution||''}</div>
+          <div style="font-size:10.5px;color:var(--txd);margin-top:3px">${CU.email}</div>
+        </div>
+      </div>
       <div class="fg">
-        <div><label>Nome completo</label><input id="p-nm" value="${prof.full_name||''}" placeholder="Dr. Pedro Santos"></div>
-        <div><label>Instituição</label><input id="p-in" value="${prof.institution||''}" placeholder="UFMS"></div>
-        <div><label>Programa / Curso</label><input id="p-co" value="${prof.course||''}" placeholder="Ciências do Movimento"></div>
-        <div><label>Nível</label><select id="p-lv">${['Mestrado','Doutorado','Pós-doutorado','Orientador','Pesquisador'].map(l=>`<option${prof.degree_level===l?' selected':''}>${l}</option>`).join('')}</select></div>
-        <div style="display:flex;justify-content:flex-end"><button class="btn btn-p btn-sm" onclick="saveProfile()">Salvar</button></div>
+        <div><label>Nome completo</label><input id="p-nm" value="${prof.full_name||''}" placeholder="Seu nome"></div>
+        <div class="fr">
+          <div><label>Instituição</label><input id="p-in" value="${prof.institution||''}" placeholder="UFMS"></div>
+          <div><label>Programa / Curso</label><input id="p-co" value="${prof.course||''}" placeholder="Ciências do Movimento"></div>
+        </div>
+        <div class="fr">
+          <div><label>Nível</label><select id="p-lv">${LEVELS.map(l=>`<option${prof.degree_level===l?' selected':''}>${l}</option>`).join('')}</select></div>
+          <div><label>Área de pesquisa</label><input id="p-ar" value="${prof.research_area||''}" placeholder="Fisiologia, IA..."></div>
+        </div>
+        <div><label>Orientador</label><input id="p-adv" value="${prof.advisor||''}" placeholder="Prof. Dr. ..."></div>
+        <div><label>Bio curta</label><textarea id="p-bio" placeholder="Uma frase sobre sua pesquisa..." style="min-height:56px">${prof.bio||''}</textarea></div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn btn-p btn-sm" onclick="saveProfile()">Salvar alterações</button></div>
       </div>
     </div>
     <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
       <div class="stitle">Identificadores Acadêmicos</div>
-      <div style="font-size:11px;color:var(--txd);margin-bottom:12px">Centralize todos os seus IDs acadêmicos</div>
+      <div style="font-size:11px;color:var(--txd);margin-bottom:12px">Centralize todos os seus IDs em um só lugar</div>
       ${PLATS.map(pl=>{const ex=ids.find(i=>i.platform===pl);return`<div class="platform-card">
-        <span style="font-size:12.5px;font-weight:500;flex:1">${pl}</span>
-        ${ex?`<span style="font-size:11px;color:var(--txm);font-family:monospace">${ex.platform_id}</span><button class="btn btn-d btn-xs" onclick="delPlatId(${ex.id})">×</button>`:`<input placeholder="ID ou URL" style="width:140px;font-size:11px;padding:4px 8px" id="pid-${pl.replace(/\s/g,'-')}" onkeydown="if(event.key==='Enter')savePlatId('${pl}')"><button class="btn btn-s btn-xs" onclick="savePlatId('${pl}')">+</button>`}
+        <span style="font-size:12px;font-weight:500;flex:1;min-width:80px">${pl}</span>
+        ${ex?`<span style="font-size:10.5px;color:var(--txm);font-family:monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ex.platform_id}</span><button class="btn btn-d btn-xs" onclick="delPlatId(${ex.id})">×</button>`:`<input placeholder="ID ou URL" style="font-size:11px;padding:4px 8px" id="pid-${pl.replace(/\s/g,'-')}" onkeydown="if(event.key==='Enter')savePlatId('${pl}')"><button class="btn btn-s btn-xs" onclick="savePlatId('${pl}')">+</button>`}
       </div>`}).join('')}
     </div>
   </div>`;
 }
-async function saveProfile(){
-  const p={full_name:$('p-nm').value.trim(),institution:$('p-in').value.trim(),course:$('p-co').value.trim(),degree_level:$('p-lv').value,updated_at:new Date().toISOString()};
-  const{error}=await db.from('profiles').upsert({id:CU.id,...p});
-  if(error){toast('Erro ao salvar','err');return}
-  $('sb-nm').textContent=p.full_name||CU.email;toast('Perfil salvo!');
-}
-async function savePlatId(pl){
-  const inputId='pid-'+pl.replace(/\s/g,'-');const val=$(inputId)?.value.trim();if(!val)return;
-  const{error}=await db.from('academic_ids').upsert({owner_id:CU.id,platform:pl,platform_id:val},{onConflict:'owner_id,platform'});
-  if(error){toast('Erro ao salvar','err');return}
-  toast(`${pl} salvo!`);rProfile();
-}
-async function delPlatId(id){await db.from('academic_ids').delete().eq('id',id);toast('Removido');rProfile()}
 
-// ADVISOR
+async function saveProfile(){
+const p={full_name:$(‘p-nm’).value.trim(),institution:$(‘p-in’).value.trim(),course:$(‘p-co’).value.trim(),degree_level:$(‘p-lv’).value,research_area:$(‘p-ar’).value.trim(),advisor:$(‘p-adv’).value.trim(),bio:$(‘p-bio’).value.trim(),updated_at:new Date().toISOString()};
+const{error}=await db.from(‘profiles’).upsert({id:CU.id,…p});
+if(error){toast(‘Erro ao salvar’,‘err’);return}
+$(‘sb-nm’).textContent=p.full_name||CU.email;
+$(‘sb-level’).textContent=p.degree_level||‘Plano Gratuito’;
+toast(‘Perfil salvo!’);rProfile();
+}
+
+async function savePlatId(pl){
+const inputId=‘pid-’+pl.replace(/\s/g,’-’);const val=$(inputId)?.value.trim();if(!val)return;
+const{error}=await db.from(‘academic_ids’).upsert({owner_id:CU.id,platform:pl,platform_id:val},{onConflict:‘owner_id,platform’});
+if(error){toast(‘Erro ao salvar’,‘err’);return}
+toast(`${pl} salvo!`);rProfile();
+}
+async function delPlatId(id){await db.from(‘academic_ids’).delete().eq(‘id’,id);toast(‘Removido’);rProfile()}
+
+// ── ADVISOR ──
 async function rAdvisor(){
 const[ar,tk,ev,ce]=await Promise.all([
 db.from(‘articles’).select(’*’).eq(‘owner_id’,CU.id),
@@ -822,15 +1090,15 @@ const nxt=e.filter(x=>x.event_date>=today()).sort((a,b)=>a.event_date.localeComp
 $(‘app-content’).innerHTML=`
 
   <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px;margin-bottom:16px">
-    <div style="font-size:14px;font-weight:600;margin-bottom:3px">Painel do Orientador</div>
-    <div style="font-size:12px;color:var(--txm)">Prof. Dr. Cássio Pinho dos Reis · Estatística · UFMS</div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:2px">Painel do Orientador</div>
+    <div style="font-size:12px;color:var(--txm)">Visão em tempo real da pesquisa</div>
     <div style="font-size:11px;color:var(--txd);margin-top:3px">${new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
   </div>
   <div class="sg" style="margin-bottom:16px">
-    <div class="sc"><div class="sv">${lido}/${a.length}</div><div class="sl">Artigos lidos</div><div class="ss">${((lido/Math.max(a.length,1))*100).toFixed(0)}%</div></div>
+    <div class="sc"><div class="sv">${lido}/${a.length}</div><div class="sl">Artigos lidos</div><div class="ss">${((lido/Math.max(a.length,1))*100).toFixed(0)}% do fichamento</div></div>
     <div class="sc"><div class="sv">${done}/${t.length}</div><div class="sl">Tarefas concluídas</div><div class="ss">${t.filter(x=>x.column_id==='doing').length} em andamento</div></div>
     <div class="sc"><div class="sv">${nxt.length}</div><div class="sl">Próximos eventos</div></div>
-    <div class="sc"><div class="sv">${hrs}h</div><div class="sl">Horas complementares</div></div>
+    <div class="sc"><div class="sv">${hrs}h</div><div class="sl">Horas complementares</div><div class="ss">${c.length} certificados</div></div>
   </div>
   <div class="g2" style="margin-bottom:16px">
     <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px">
@@ -839,31 +1107,31 @@ $(‘app-content’).innerHTML=`
         <span class="badge b-info" style="font-size:9px;flex-shrink:0">${evLabel(ev.type)}</span>
         <span style="font-size:12px;flex:1">${ev.title}</span>
         <span style="font-size:10.5px;color:var(--txd);white-space:nowrap">${fmtDate(ev.event_date)}</span>
-      </div>`).join('')||'<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhum evento</div>'}
+      </div>`).join('')||'<div style="color:var(--txd);font-size:12px;padding:8px 0">Nenhum evento próximo</div>'}
     </div>
     <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px">
       <div class="stitle">Status Kanban</div>
       ${COLS.map(col=>{const count=t.filter(x=>x.column_id===col.id).length;return`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="font-size:12px">${col.label}</span><span class="badge b-def">${count}</span></div>`}).join('')}
       <div style="margin-top:10px"><div style="font-size:11px;color:var(--txd);margin-bottom:5px">Em andamento:</div>
-        ${t.filter(x=>x.column_id==='doing').map(x=>`<div style="font-size:12px;color:var(--txm);padding:2px 0">→ ${x.title}</div>`).join('')||'<div style="font-size:11px;color:var(--txd)">Nenhuma</div>'}
+        ${t.filter(x=>x.column_id==='doing').map(x=>`<div style="font-size:12px;color:var(--txm);padding:2px 0">→ ${x.title}</div>`).join('')||'<div style="font-size:11px;color:var(--txd)">Nenhuma tarefa</div>'}
       </div>
     </div>
   </div>
   <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:16px">
     <div class="stitle">Enviar Orientação</div>
     <div class="fg">
-      <div class="fr"><div><label>Tipo</label><select id="or-ty"><option>Orientação</option><option>Correção</option><option>Aprovação</option><option>Alerta</option></select></div><div><label>Seção</label><select id="or-se"><option value="">Geral</option><option value="fichamento">Fichamento</option><option value="kanban">Kanban</option><option value="metodologia">Metodologia</option></select></div></div>
+      <div class="fr"><div><label>Tipo</label><select id="or-ty"><option>Orientação</option><option>Correção</option><option>Aprovação</option><option>Alerta</option></select></div><div><label>Seção</label><select id="or-se"><option value="">Geral</option><option value="fichamento">Fichamento</option><option value="kanban">Kanban</option><option value="metodologia">Metodologia</option><option value="publicacao">Publicação</option></select></div></div>
       <div><label>Mensagem</label><textarea id="or-tx" placeholder="Digite sua orientação..." style="min-height:80px"></textarea></div>
     </div>
     <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn btn-p btn-sm" onclick="saveOrient()">Enviar Orientação</button></div>
   </div>`;
 }
 
-// INIT
+// ── INIT ──
 window.addEventListener(‘load’,()=>{
 document.querySelectorAll(’.overlay’).forEach(o=>o.addEventListener(‘click’,e=>{if(e.target===o)o.classList.remove(‘open’)}));
 $(‘l-pass’)?.addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doLogin()});
-$(‘l-email’)?.addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doLogin()});
+$(‘l-email’)?.addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)$(‘l-pass’)?.focus()});
 });
 </script>
 
