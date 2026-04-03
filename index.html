@@ -20,9 +20,7 @@ body{font-family:'Inter',sans-serif;font-size:13px;background:var(--bg);color:va
 .auth-logo h1{font-size:24px;font-weight:300;letter-spacing:-.5px;color:var(–tx)}
 .auth-logo h1 strong{font-weight:700}
 .auth-logo p{font-size:12px;color:var(–txd);margin-top:5px;font-style:italic}
-.auth-tabs{display:flex;border-bottom:1px solid var(–bd);margin-bottom:24px}
-.auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;color:var(–txd);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;user-select:none}
-.auth-tab.active{color:var(–tx);border-bottom-color:var(–tx)}
+
 .auth-err{background:var(–dgl);color:var(–dg);border:1px solid var(–dg);border-radius:var(–rs);padding:8px 12px;font-size:12px;display:none;margin-bottom:4px}
 .auth-err.show{display:block}
 .auth-footer{text-align:center;margin-top:18px;font-size:11px;color:var(–txd)}
@@ -207,36 +205,38 @@ input:checked+.ttr::before{transform:translateX(16px)}
       <h1>ficha<strong>AI</strong></h1>
       <p>Você pesquisa. A gente organiza.</p>
     </div>
-    <div class="auth-tabs">
-      <div class="auth-tab active" onclick="switchTab('login')">Entrar</div>
-      <div class="auth-tab" onclick="switchTab('register')">Criar conta</div>
+    <div style="display:flex;border-bottom:1px solid var(--bd);margin-bottom:24px">
+      <div id="tab-login" onclick="switchTab('login')" style="flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid var(--tx);margin-bottom:-1px;color:var(--tx)">Entrar</div>
+      <div id="tab-reg" onclick="switchTab('register')" style="flex:1;padding:9px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--txd)">Criar conta</div>
     </div>
-    <div id="auth-login" style="display:flex;flex-direction:column;gap:13px">
-      <div class="auth-err" id="login-err"></div>
-      <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
-      <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
-      <button class="btn btn-p" onclick="doLogin()" style="width:100%;justify-content:center;padding:9px">Entrar</button>
-    </div>
-    <div id="auth-register" style="display:none;flex-direction:column;gap:13px">
-      <div class="auth-err" id="reg-err"></div>
-      <div><label>Nome completo *</label><input id="r-name" placeholder="Ex: Pedro Santos"></div>
-      <div><label>Email *</label><input type="email" id="r-email" placeholder="seu@email.com" autocomplete="email"></div>
-      <div><label>Senha * (mínimo 6 caracteres)</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
-      <div><label>Instituição</label><input id="r-inst" placeholder="UFMS, USP, UNICAMP..."></div>
-      <div><label>Nível acadêmico</label>
-        <select id="r-level">
-          <option>Graduação</option>
-          <option>Especialização / MBA</option>
-          <option selected>Mestrado</option>
-          <option>Doutorado</option>
-          <option>Pós-doutorado</option>
-          <option>Orientador / Professor</option>
-          <option>Pesquisador Independente</option>
-        </select>
-      </div>
-      <button class="btn btn-p" onclick="doRegister()" style="width:100%;justify-content:center;padding:9px">Criar conta gratuita</button>
-    </div>
-    <div class="auth-footer">Ao continuar você concorda com os Termos de Uso e Política de Privacidade</div>
+
+```
+<div id="auth-login" style="display:flex;flex-direction:column;gap:13px">
+  <div id="login-err" style="display:none;background:var(--dgl);color:var(--dg);border:1px solid var(--dg);border-radius:4px;padding:8px 12px;font-size:12px"></div>
+  <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
+  <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+  <button id="btn-login" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Entrar</button>
+</div>
+
+<div id="auth-register" style="display:none;flex-direction:column;gap:13px">
+  <div id="reg-err" style="display:none;background:var(--dgl);color:var(--dg);border:1px solid var(--dg);border-radius:4px;padding:8px 12px;font-size:12px"></div>
+  <div><label>Nome completo *</label><input id="r-name" placeholder="Ex: Pedro Santos"></div>
+  <div><label>Email *</label><input type="email" id="r-email" placeholder="seu@email.com" autocomplete="email"></div>
+  <div><label>Senha * (mín. 6 caracteres)</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
+  <div><label>Instituição</label><input id="r-inst" placeholder="UFMS, USP, UNICAMP..."></div>
+  <div><label>Nível acadêmico</label>
+    <select id="r-level">
+      <option>Graduação</option><option>Especialização / MBA</option>
+      <option selected>Mestrado</option><option>Doutorado</option>
+      <option>Pós-doutorado</option><option>Orientador / Professor</option>
+      <option>Pesquisador Independente</option>
+    </select>
+  </div>
+  <button id="btn-reg" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Criar conta gratuita</button>
+</div>
+<div class="auth-footer">Ao continuar você concorda com os Termos de Uso e Política de Privacidade</div>
+```
+
   </div>
 </div>
 
@@ -423,57 +423,59 @@ function evLabel(t){return{'ev-sub':'Submissão','ev-pub':'Publicação','ev-dea
 const LEVELS=['Graduação','Especialização / MBA','Mestrado','Doutorado','Pós-doutorado','Orientador / Professor','Pesquisador Independente'];
 
 // ── AUTH ──
+function showErr(id,msg){const el=$(id);el.textContent=msg;el.style.display='block'}
+function hideErr(id){const el=$(id);if(el)el.style.display='none'}
+
 function switchTab(tab){
-  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0)===(tab==='login')));
-  const login=$('auth-login'),reg=$('auth-register');
-  login.style.display=tab==='login'?'flex':'none';
-  login.style.flexDirection='column';login.style.gap='13px';
-  reg.style.display=tab==='register'?'flex':'none';
-  reg.style.flexDirection='column';reg.style.gap='13px';
-  $('login-err').className='auth-err';
-  $('reg-err').className='auth-err';
+  const isLogin=tab==='login';
+  // tabs
+  $('tab-login').style.fontWeight=isLogin?'600':'500';
+  $('tab-login').style.color=isLogin?'var(--tx)':'var(--txd)';
+  $('tab-login').style.borderBottom=isLogin?'2px solid var(--tx)':'2px solid transparent';
+  $('tab-reg').style.fontWeight=isLogin?'500':'600';
+  $('tab-reg').style.color=isLogin?'var(--txd)':'var(--tx)';
+  $('tab-reg').style.borderBottom=isLogin?'2px solid transparent':'2px solid var(--tx)';
+  // forms
+  const l=$('auth-login'),r=$('auth-register');
+  l.style.display=isLogin?'flex':'none';
+  l.style.flexDirection='column';l.style.gap='13px';
+  r.style.display=isLogin?'none':'flex';
+  r.style.flexDirection='column';r.style.gap='13px';
+  hideErr('login-err');hideErr('reg-err');
 }
 async function doLogin(){
   const email=$('l-email').value.trim(),pass=$('l-pass').value;
-  const err=$('login-err');
-  err.className='auth-err';
-  if(!email||!pass){err.textContent='Preencha email e senha.';err.className='auth-err show';return}
-  const btn=document.querySelector('#auth-login button');
-  btn.textContent='Entrando...';btn.disabled=true;
+  hideErr('login-err');
+  if(!email||!pass){showErr('login-err','Preencha email e senha.');return}
+  const btn=$('btn-login');btn.textContent='Entrando...';btn.disabled=true;
   const{error}=await db.auth.signInWithPassword({email,password:pass});
   btn.textContent='Entrar';btn.disabled=false;
   if(error){
-    if(error.message.includes('Invalid login')||error.message.includes('invalid')){
-      err.textContent='Email ou senha incorretos. Verifique seus dados.';
-    } else if(error.message.includes('Email not confirmed')){
-      err.textContent='Confirme seu email antes de entrar.';
+    const msg=error.message||'';
+    if(msg.includes('Invalid login')||msg.includes('invalid')||msg.includes('credentials')){
+      showErr('login-err','Email ou senha incorretos.');
+    } else if(msg.includes('not confirmed')){
+      showErr('login-err','Confirme seu email antes de entrar.');
     } else {
-      err.textContent='Erro ao entrar. Tente novamente.';
+      showErr('login-err','Erro ao entrar. Tente novamente.');
     }
-    err.className='auth-err show';
   }
 }
 async function doRegister(){
   const name=$('r-name').value.trim(),email=$('r-email').value.trim(),pass=$('r-pass').value;
-  const err=$('reg-err');
-  err.className='auth-err';
-  if(!name){err.textContent='Preencha seu nome completo.';err.className='auth-err show';return}
-  if(!email){err.textContent='Preencha seu email.';err.className='auth-err show';return}
-  if(!pass){err.textContent='Crie uma senha.';err.className='auth-err show';return}
-  if(pass.length<6){err.textContent='A senha deve ter no mínimo 6 caracteres.';err.className='auth-err show';return}
-  const btn=document.querySelector('#auth-register button');
-  btn.textContent='Criando conta...';btn.disabled=true;
+  hideErr('reg-err');
+  if(!name){showErr('reg-err','Preencha seu nome completo.');return}
+  if(!email){showErr('reg-err','Preencha seu email.');return}
+  if(!pass||pass.length<6){showErr('reg-err','A senha deve ter no mínimo 6 caracteres.');return}
+  const btn=$('btn-reg');btn.textContent='Criando conta...';btn.disabled=true;
   const{error}=await db.auth.signUp({email,password:pass,options:{data:{full_name:name,institution:$('r-inst').value.trim(),degree_level:$('r-level').value}}});
   btn.textContent='Criar conta gratuita';btn.disabled=false;
   if(error){
-    if(error.message.includes('already registered')||error.message.includes('already been registered')){
-      err.textContent='Este email já está cadastrado. Faça login.';
-    } else if(error.message.includes('invalid email')){
-      err.textContent='Email inválido. Verifique o formato.';
-    } else {
-      err.textContent='Erro ao criar conta: '+error.message;
-    }
-    err.className='auth-err show';return;
+    const msg=error.message||'';
+    if(msg.includes('already')){showErr('reg-err','Este email já está cadastrado. Faça login.');}
+    else if(msg.includes('invalid')){showErr('reg-err','Email inválido.');}
+    else{showErr('reg-err','Erro: '+msg);}
+    return;
   }
   toast('Conta criada! Faça login para continuar.');
   switchTab('login');
@@ -1168,8 +1170,11 @@ $(‘app-content’).innerHTML=`
 // ── INIT ──
 window.addEventListener(‘load’,()=>{
 document.querySelectorAll(’.overlay’).forEach(o=>o.addEventListener(‘click’,e=>{if(e.target===o)o.classList.remove(‘open’)}));
-$(‘l-pass’)?.addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doLogin()});
-$(‘l-email’)?.addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)$(‘l-pass’)?.focus()});
+$(‘btn-login’).addEventListener(‘click’, doLogin);
+$(‘btn-reg’).addEventListener(‘click’, doRegister);
+$(‘l-pass’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doLogin()});
+$(‘l-email’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)$(‘l-pass’).focus()});
+$(‘r-pass’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doRegister()});
 });
 </script>
 
