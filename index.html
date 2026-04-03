@@ -212,14 +212,15 @@ input:checked+.ttr::before{transform:translateX(16px)}
 
 ```
 <div id="auth-login" style="display:flex;flex-direction:column;gap:13px">
-  <div id="login-err" style="display:none;background:var(--dgl);color:var(--dg);border:1px solid var(--dg);border-radius:4px;padding:8px 12px;font-size:12px"></div>
+  
   <div><label>Email</label><input type="email" id="l-email" placeholder="seu@email.com" autocomplete="email"></div>
   <div><label>Senha</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
-  <button id="btn-login" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Entrar</button>
+  <div id="login-err" style="display:none;background:#ffebee;color:#c62828;border:1px solid #c62828;border-radius:4px;padding:8px 12px;font-size:12px;margin-bottom:4px"></div>
+  <button onclick="doLogin()" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Entrar</button>
 </div>
 
 <div id="auth-register" style="display:none;flex-direction:column;gap:13px">
-  <div id="reg-err" style="display:none;background:var(--dgl);color:var(--dg);border:1px solid var(--dg);border-radius:4px;padding:8px 12px;font-size:12px"></div>
+  
   <div><label>Nome completo *</label><input id="r-name" placeholder="Ex: Pedro Santos"></div>
   <div><label>Email *</label><input type="email" id="r-email" placeholder="seu@email.com" autocomplete="email"></div>
   <div><label>Senha * (mín. 6 caracteres)</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
@@ -232,7 +233,8 @@ input:checked+.ttr::before{transform:translateX(16px)}
       <option>Pesquisador Independente</option>
     </select>
   </div>
-  <button id="btn-reg" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Criar conta gratuita</button>
+  <div id="reg-err" style="display:none;background:#ffebee;color:#c62828;border:1px solid #c62828;border-radius:4px;padding:8px 12px;font-size:12px;margin-bottom:4px"></div>
+  <button onclick="doRegister()" class="btn btn-p" style="width:100%;justify-content:center;padding:9px">Criar conta gratuita</button>
 </div>
 <div class="auth-footer">Ao continuar você concorda com os Termos de Uso e Política de Privacidade</div>
 ```
@@ -447,9 +449,7 @@ async function doLogin(){
   const email=$('l-email').value.trim(),pass=$('l-pass').value;
   hideErr('login-err');
   if(!email||!pass){showErr('login-err','Preencha email e senha.');return}
-  const btn=$('btn-login');btn.textContent='Entrando...';btn.disabled=true;
   const{error}=await db.auth.signInWithPassword({email,password:pass});
-  btn.textContent='Entrar';btn.disabled=false;
   if(error){
     const msg=error.message||'';
     if(msg.includes('Invalid login')||msg.includes('invalid')||msg.includes('credentials')){
@@ -467,9 +467,7 @@ async function doRegister(){
   if(!name){showErr('reg-err','Preencha seu nome completo.');return}
   if(!email){showErr('reg-err','Preencha seu email.');return}
   if(!pass||pass.length<6){showErr('reg-err','A senha deve ter no mínimo 6 caracteres.');return}
-  const btn=$('btn-reg');btn.textContent='Criando conta...';btn.disabled=true;
   const{error}=await db.auth.signUp({email,password:pass,options:{data:{full_name:name,institution:$('r-inst').value.trim(),degree_level:$('r-level').value}}});
-  btn.textContent='Criar conta gratuita';btn.disabled=false;
   if(error){
     const msg=error.message||'';
     if(msg.includes('already')){showErr('reg-err','Este email já está cadastrado. Faça login.');}
@@ -1170,11 +1168,6 @@ $(‘app-content’).innerHTML=`
 // ── INIT ──
 window.addEventListener(‘load’,()=>{
 document.querySelectorAll(’.overlay’).forEach(o=>o.addEventListener(‘click’,e=>{if(e.target===o)o.classList.remove(‘open’)}));
-$(‘btn-login’).addEventListener(‘click’, doLogin);
-$(‘btn-reg’).addEventListener(‘click’, doRegister);
-$(‘l-pass’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doLogin()});
-$(‘l-email’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)$(‘l-pass’).focus()});
-$(‘r-pass’).addEventListener(‘keydown’,e=>{if(e.key===‘Enter’)doRegister()});
 });
 </script>
 
